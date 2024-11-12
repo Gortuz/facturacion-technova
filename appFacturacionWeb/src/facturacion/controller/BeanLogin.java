@@ -1,15 +1,17 @@
 package facturacion.controller;
 
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 import facturacion.model.manager.ManagerLogin;
+import java.io.Serializable;
 
-@ManagedBean
+@Named
 @SessionScoped
-public class BeanLogin {
+public class BeanLogin implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String codigoUsuario;
 	private String clave;
 	private String tipoUsuario;

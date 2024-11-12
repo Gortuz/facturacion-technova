@@ -4,16 +4,18 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.manager.ManagerPedidos;
+import java.io.Serializable;
 
-@ManagedBean
+@Named
 @SessionScoped
-public class BeanSupervisor {
+public class BeanSupervisor implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Date fechaInicio;
 	private Date fechaFinal;
 	@EJB
@@ -21,7 +23,7 @@ public class BeanSupervisor {
 	private PedidoCab pedidoCabTmp;
 	
 	//Inyeccion de beans manejados:
-	@ManagedProperty(value="#{beanLogin}")
+	@Inject
 	private BeanLogin beanLogin;
 	
 	public BeanSupervisor(){

@@ -4,18 +4,20 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
+import java.io.Serializable;
 
-@ManagedBean
+@Named
 @SessionScoped
-public class BeanPedidos {
+public class BeanPedidos implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String cedula;
 	private String nombres;
 	private String apellidos;

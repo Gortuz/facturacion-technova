@@ -4,14 +4,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
+
 import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.dao.entities.Producto;
+import java.io.Serializable;
 
-@ManagedBean
+@Named
 @SessionScoped
-public class BeanProductos {
+public class BeanProductos implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private List<Producto> listaProductos;
 	@EJB
 	private ManagerFacturacion managerFacturacion;
