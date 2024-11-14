@@ -15,7 +15,8 @@
 			<p:menuitem value="Facturas" action="facturas"></p:menuitem>
 			<p:menuitem value="Parámetros" action="parametros"></p:menuitem>
 			<f:facet name="options">
-				<p:commandButton value="Salir" action="#{beanLogin.salirSistema()}" icon="ui-icon-extlink"/>
+				<p:commandButton value="Salir" action="#{beanLogin.salirSistema()}"
+					icon="pi pi-sign-out" />
 			</f:facet>
 		</p:menubar>
 	</h:form>
@@ -30,7 +31,7 @@
 			<h:outputText value="" />
 			<p:calendar value="#{beanSupervisor.fechaInicio}" />
 			<p:calendar value="#{beanSupervisor.fechaFinal}" />
-			<p:commandButton icon="ui-icon-search" value="Buscar"
+			<p:commandButton icon="pi pi-search" value="Buscar"
 				update=":form2:panel1" action="#{beanSupervisor.actionBuscar()}" />
 		</p:panelGrid>
 	</h:form>
@@ -55,13 +56,13 @@
 				</p:column>
 				<p:column headerText="VER">
 					<p:commandButton action="#{beanSupervisor.actionCargarPedido(pc)}"
-						icon="ui-icon-search" update=":form2:dlg1"
+						icon="pi pi-search" update=":form2:dlg1"
 						oncomplete="PF('dialogo1').show()" />
 				</p:column>
 				<p:column headerText="DESPACHAR">
 					<p:commandButton update=":form2:panel1,:mensajes"
 						action="#{beanSupervisor.actionDespacharPedido(pc)}"
-						icon="ui-icon-check" />
+						icon="pi pi-check" />
 				</p:column>
 			</p:dataTable>
 		</p:panel>

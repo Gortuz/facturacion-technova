@@ -8,11 +8,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Facturas</title>
 </h:head>
-<body style="font-size:60%">
+<body style="font-size: 60%">
 	<h:form id="form1">
 		<h:commandLink action="index" value="Ir al inicio..." />
-		<p:dataTable value="#{beanFactura.listaFacturasCab}"
-			var="f" id="tablaFacturas">
+		<p:dataTable value="#{beanFactura.listaFacturasCab}" var="f"
+			id="tablaFacturas">
 			<f:facet name="header">
 				<h:outputText value="Listado de facturas" />
 			</f:facet>
@@ -39,7 +39,7 @@
 					<h:outputText value="FECHA"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{f.fechaEmision}">
-					<f:convertDateTime pattern="dd/MM/yyyy"/>
+					<f:convertDateTime pattern="dd/MM/yyyy" />
 				</h:outputText>
 			</p:column>
 			<p:column id="col5">
@@ -47,7 +47,7 @@
 					<h:outputText value="SUBTOTAL"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{f.subtotal}">
-					<f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+					<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
 				</h:outputText>
 			</p:column>
 			<p:column id="col6">
@@ -55,7 +55,7 @@
 					<h:outputText value="IVA"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{f.valorIva}">
-					<f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+					<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
 				</h:outputText>
 			</p:column>
 			<p:column id="col7">
@@ -63,7 +63,7 @@
 					<h:outputText value="TOTAL"></h:outputText>
 				</f:facet>
 				<h:outputText value="#{f.total}">
-					<f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+					<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
 				</h:outputText>
 			</p:column>
 			<p:column id="col8">

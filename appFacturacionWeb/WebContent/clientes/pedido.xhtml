@@ -10,9 +10,10 @@
 </h:head>
 <body style="font-size: 70%">
 	<h:form>
-	<p:panel style="text-align:right">
-		<p:commandButton value="Salir" icon="ui-icon-extlink" action="#{beanLogin.salirSistema()}" />
-	</p:panel>
+		<p:panel style="text-align:right">
+			<p:commandButton value="Salir" icon="pi pi-sign-out"
+				action="#{beanLogin.salirSistema()}" />
+		</p:panel>
 	</h:form>
 	<p:panel header="Datos del cliente:">
 		<h:outputText
@@ -32,7 +33,7 @@
 					<h:outputText value="#{p.descripcion}" />
 					<p:commandButton
 						actionListener="#{beanPedidos.actionInsertarProducto(p)}"
-						update=":form2:carrito" icon="ui-icon-cart" />
+						update=":form2:carrito" icon="pi pi-shopping-cart" />
 				</h:panelGrid>
 			</p:panel>
 		</p:dataGrid>
