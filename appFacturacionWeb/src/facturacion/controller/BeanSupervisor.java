@@ -52,6 +52,7 @@ public class BeanSupervisor implements Serializable {
 		try {
 			//invocamos a ManagerFacturacion para crear una nueva factura:
 			managerPedidos.despacharPedido(beanLogin.getCodigoUsuario(),pedidoCab.getNumeroPedido());
+			JSFUtil.crearMensajeINFO("Pedido Despachado correctamente");
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeERROR(e.getMessage());
