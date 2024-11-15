@@ -11,7 +11,7 @@
 <body style="font-size: 60%">
 	<h:form id="form1">
 		<h:commandLink action="index" value="Ir al inicio..." />
-		<p:dataTable value="#{beanFactura.listaFacturasCab}" var="f"
+		<p:dataTable value="#{beanFactura.listaFacturasCab}" var="f" paginator="true" rows="15" 
 			id="tablaFacturas">
 			<f:facet name="header">
 				<h:outputText value="Listado de facturas" />
