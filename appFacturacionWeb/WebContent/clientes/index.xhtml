@@ -17,6 +17,8 @@
 					maxlength="10" required="true"
 					requiredMessage="Debe ingresar la cedula." />
 				<p:message for="cedula" />
+				<p:commandButton value="Regresar" action="/index.xhtml" 
+					icon="pi pi-arrow-left" immediate="true"/>
 				<p:commandButton action="#{beanPedidos.actionComprobarCedula()}"
 					value="Siguiente..." update="panel1" />
 				<p:messages />
