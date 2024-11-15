@@ -34,6 +34,11 @@ public class BeanSupervisor implements Serializable {
 		//los parametros de fechas.
 		return "";
 	}
+	public String actionBorrarFiltros(){
+		setFechaInicio(null);
+		setFechaFinal(null);
+		return "";
+	}
 	/**
 	 * 
 	 * @param pedidoCab
