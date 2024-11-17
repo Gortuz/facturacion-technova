@@ -26,7 +26,6 @@ public class BeanProductos implements Serializable {
 	private BigDecimal precioUnitario;
 	private String tieneImpuesto;
 	
-	
 	public BeanProductos(){
 		
 	}
@@ -133,7 +132,5 @@ public class BeanProductos implements Serializable {
 	}
 	public void setTieneImpuesto(String tieneImpuesto) {
 		this.tieneImpuesto = tieneImpuesto;
-	}
-	
-	
+	}	
 }
