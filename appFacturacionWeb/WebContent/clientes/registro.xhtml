@@ -15,7 +15,10 @@
 				<h:outputText value="Ingrese su cedula" />
 				<p:inputText id="cedula" value="#{beanPedidos.cedula}" size="10"
 					maxlength="10" required="true"
-					requiredMessage="Debe ingresar la cedula." />
+					requiredMessage="Debe ingresar la cedula."
+					validatorMessage="La cédula debe tener exactamente 10 caracteres">
+					<f:validateLength minimum="10" maximum="10"></f:validateLength>	
+				</p:inputText>
 				<p:message for="cedula" />
 				<h:outputText value="Nombres" />
 				<p:inputText id="nombres" value="#{beanPedidos.nombres}"
