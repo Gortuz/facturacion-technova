@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Busqueda de solicitudes</title>
+	<title>Búsqueda de solicitudes</title>
 </h:head>
 <body style="font-size: 70%">
 	<h:form>
@@ -84,13 +84,17 @@
 					<h:outputText
 						value="#{beanSupervisor.pedidoCabTmp.cliente.cedulaCliente}" />
 					<h:outputText value="Nombres:" />
-					<h:outputText value="#{beanSupervisor.pedidoCabTmp.cliente.nombres}" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.cliente.nombres}" />
 					<h:outputText value="Apellidos:" />
-					<h:outputText value="#{beanSupervisor.pedidoCabTmp.cliente.apellidos}" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.cliente.apellidos}" />
 					<h:outputText value="Dirección:" />
-					<h:outputText value="#{beanSupervisor.pedidoCabTmp.cliente.direccion}" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.cliente.direccion}" />
 					<h:outputText value="Estado del pedido:" />
-					<h:outputText value="#{beanSupervisor.pedidoCabTmp.estadoPedido.descripcionEstado}" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.estadoPedido.descripcionEstado}" />
 					<h:outputText value="Subtotal:" />
 					<h:outputText value="#{beanSupervisor.pedidoCabTmp.subtotal}">
 						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
