@@ -58,8 +58,11 @@
 				<h:outputText value="#{p.precioUnitario}"></h:outputText>
 			</p:column>
 			<p:column headerText="ELIMINAR">
-				<p:commandButton icon="pi pi-times-circle"
-					action="#{beanProductos.actionEliminarProducto(p)}" update=":form2"></p:commandButton>
+    			<p:commandButton type="button" onclick="PF('cd').show()" icon="pi pi-times-circle"/>
+    			<p:confirmDialog message="¿Seguro deseas eliminar el producto #{p.nombre}?" header="Initiating destroy process" severity="alert" widgetVar="cd">
+        			<p:commandButton value="Confirmar" action="#{beanProductos.actionEliminarProducto(p)}" update="form2" oncomplete="PF('cd').hide()"/>
+        			<p:commandButton value="Cancelar" onclick="PF('cd').hide();" type="button" />
+    			</p:confirmDialog>
 			</p:column>
 			<p:column headerText="ACTUALIZAR">
 				<p:commandButton icon="pi pi-check-circle"
