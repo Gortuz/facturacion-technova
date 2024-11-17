@@ -32,11 +32,11 @@
 			<p:calendar value="#{beanSupervisor.fechaInicio}" />
 			<p:calendar value="#{beanSupervisor.fechaFinal}" />
 			<p:commandButton icon="pi pi-search" value="Buscar"
-				update=":form2:panel1" action="#{beanSupervisor.actionBuscar()}" />
+				 update=":mensajes, :form2:panel1"  action="#{beanSupervisor.actionBuscar()}" />
 		</p:panelGrid>
 	</h:form>
 	<br />
-	<p:messages id="mensajes"></p:messages>
+	<p:messages id="mensajes" autoUpdate="true" />
 	<h:form id="form2">
 		<p:panel header="Resultado de la búsqueda:" id="panel1">
 			<p:dataTable value="#{beanSupervisor.listaPedidoCab}" var="pc" paginator="true">
