@@ -8,8 +8,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Facturas</title>
 </h:head>
-<body style="font-size: 60%">
-	<h:form id="form1">
+<body style="font-size: 80%">
+	<p:commandButton value="Print All" type="button" icon="pi pi-print"
+		style="display:block;margin-bottom: 20px">
+		<p:printer target=":form1" />
+	</p:commandButton>
+	<h:form id="form1" >
 		<h:commandLink action="index" value="Ir al inicio..." />
 		<p:dataTable value="#{beanFactura.listaFacturasCab}" var="f" paginator="true" rows="15" 
 			id="tablaFacturas">
