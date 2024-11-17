@@ -22,18 +22,20 @@
 	</h:form>
 	<br />
 	<h:form id="form1">
-		<p:panelGrid columns="3">
+		<p:panelGrid columns="4">
 			<f:facet name="header">
 				<h:outputText value="BÚSQUEDA" />
 			</f:facet>
 			<h:outputText value="Fecha inicio" />
 			<h:outputText value="Fecha fin" />
 			<h:outputText value="" />
+			<h:outputText value="" />
 			<p:calendar value="#{beanSupervisor.fechaInicio}" />
 			<p:calendar value="#{beanSupervisor.fechaFinal}" />
-			<p:commandButton icon="pi pi-search" value="Buscar"
-				update=":mensajes, :form2:panel1"
-				action="#{beanSupervisor.actionBuscar()}" />
+			<p:commandButton icon="pi pi-search" value="Buscar"update=":mensajes, :form2:panel1" action="#{beanSupervisor.actionBuscar()}" />
+			<p:commandButton icon="pi pi-eraser" value="Borrar Filtros"
+				update=":form2:panel1 :form1" action="#{beanSupervisor.actionBorrarFiltros()}" />	
+
 		</p:panelGrid>
 	</h:form>
 	<br />

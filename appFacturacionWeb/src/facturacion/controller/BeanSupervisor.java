@@ -42,6 +42,11 @@ public class BeanSupervisor implements Serializable {
 		//los parametros de fechas.
 		return "";
 	}
+	public String actionBorrarFiltros(){
+		setFechaInicio(null);
+		setFechaFinal(null);
+		return "";
+	}
 	/**
 	 * 
 	 * @param pedidoCab
@@ -60,6 +65,7 @@ public class BeanSupervisor implements Serializable {
 		try {
 			//invocamos a ManagerFacturacion para crear una nueva factura:
 			managerPedidos.despacharPedido(beanLogin.getCodigoUsuario(),pedidoCab.getNumeroPedido());
+			JSFUtil.crearMensajeINFO("Pedido Despachado correctamente");
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeERROR(e.getMessage());
