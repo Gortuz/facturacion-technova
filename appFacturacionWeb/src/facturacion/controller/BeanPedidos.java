@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.PedidoCab;
+import facturacion.model.dao.entities.PedidoDet;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
@@ -89,6 +90,18 @@ public class BeanPedidos implements Serializable {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
 	}
+	
+	public void actionEliminarProducto(PedidoDet p){
+		try {
+			if(pedidoCabTmp!=null)
+			//eliminamos un producto del carrito de compras:
+			managerPedidos.eliminarDetallePedidoTmp(pedidoCabTmp,p);
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSFUtil.crearMensajeERROR(e.getMessage());
+		}
+	}
+	
 	public String actionGuardarPedido(){
 		try {
 			managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
