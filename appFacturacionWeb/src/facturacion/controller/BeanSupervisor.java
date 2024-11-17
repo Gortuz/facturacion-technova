@@ -30,6 +30,14 @@ public class BeanSupervisor implements Serializable {
 		
 	}
 	public String actionBuscar(){
+		if (fechaInicio == null || fechaFinal == null) {
+	        JSFUtil.crearMensajeWARN("Debe seleccionar ambas fechas.");
+	        return ""; 
+	    }
+	    if (fechaFinal.before(fechaInicio)) {
+	        JSFUtil.crearMensajeERROR("La fecha final no puede ser menor que la fecha inicial.");
+	        return "";
+	    }
 		//unicamente se invoca esta accion para actualizar
 		//los parametros de fechas.
 		return "";
