@@ -197,6 +197,11 @@ public class ManagerPedidos {
 
 		// buscamos el producto:
 		prod = managerFacturacion.findProductoById(codigoProducto);
+		
+		// verificamos el Stock.
+		if (prod.getExistencia() <= 0) throw new Exception(
+				"Sin Stock.");
+		
 		// creamos un nuevo detalle y llenamos sus propiedades:
 		pedidoDet = new PedidoDet();
 		pedidoDet.setCantidad(cantidad);
