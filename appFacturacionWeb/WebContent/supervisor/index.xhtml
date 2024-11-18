@@ -67,13 +67,22 @@
 						oncomplete="PF('dialogo1').show()" />
 				</p:column>
 				<p:column headerText="DESPACHAR">
-					<p:commandButton update=":form2:panel1,:mensajes"
-						action="#{beanSupervisor.actionDespacharPedido(pc)}"
-						icon="pi pi-check" 
-						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado)}" />
+					<p:commandButton update=":form2:menuConfirmar"
+						action="#{beanSupervisor.actionCargarPedido(pc)}"
+						icon="pi pi-check" oncomplete="PF('menu').show()"
+						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado)}"  />
 				</p:column>
 			</p:dataTable>
 		</p:panel>
+		<p:confirmDialog 
+				message="¿Seguro deseas despachar el pedido #{beanSupervisor.pedidoCabTmp.numeroPedido}?" 
+				header="Despachar pedido" 
+				severity="alert" 
+				widgetVar="menu"
+				id="menuConfirmar">
+        			<p:commandButton value="Confirmar" action="#{beanSupervisor.actionDespacharPedido(beanSupervisor.pedidoCabTmp)}" update=":form2:panel1,:mensajes" oncomplete="PF('menu').hide()"/>
+        			<p:commandButton value="Cancelar" onclick="PF('menu').hide();" type="button" />
+    	</p:confirmDialog>
 		<p:dialog header="INFORMACIÓN" widgetVar="dialogo1" modal="true"
 			id="dlg1">
 			<p:panel id="detallePedido" header="Información del pedido"

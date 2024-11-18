@@ -74,13 +74,27 @@
 				<f:facet name="header">
 					<h:outputText value="DETALLES"></h:outputText>
 				</f:facet>
-				<h:dataTable value="#{f.facturaDets}" var="fd">
-					<h:column>
-						<h:outputText value="#{fd.producto.nombre}" />
-					</h:column>
-				</h:dataTable>
+				<p:commandButton value="Detalle" 
+					oncomplete="PF('detalleDialog').show()" 
+					update=":form1"/>
+				<!-- Diálogo emergente -->
+				<p:dialog id="detalleDialog" widgetVar="detalleDialog"
+					header="Detalles de la Factura" modal="true" draggable="false"
+					resizable="false" closable="true">
+					<h:form id="detalleDialogForm">
+						<p:dataTable value="#{f.facturaDets}" var="fd" style="width:100%">
+							<p:column headerText="Producto">
+								<h:outputText value="#{fd.producto.nombre}" />
+							</p:column>
+						</p:dataTable>
+						<p:commandButton value="Cerrar"
+							onclick="PF('detalleDialog').hide()" type="button" />
+					</h:form>
+				</p:dialog>
 			</p:column>
 		</p:dataTable>
+
+
 	</h:form>
 </body>
 </html>
