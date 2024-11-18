@@ -17,11 +17,19 @@
 					maxlength="10" required="true"
 					requiredMessage="Debe ingresar la cedula." />
 				<p:message for="cedula" />
+				<h:outputText value="Ingrese su clave" />
+				<p:password id="clave" value="#{beanPedidos.clave}" size="10"
+					maxlength="10" required="true"
+					requiredMessage="Debe ingresar su clave." />
+				<p:message for="clave" />
 				<p:commandButton action="#{beanPedidos.actionComprobarCedula()}"
-					value="Siguiente..." update="panel1" />
+					value="Ingresar" update="panel1" />
+				<p:commandButton action="registro"
+					value="Soy nuevo" update="panel1" inmediate="true" process="@this"/>
 				<p:messages />
 			</h:panelGrid>
 		</p:panel>
 	</h:form>
+	
 </body>
 </html>
