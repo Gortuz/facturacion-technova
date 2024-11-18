@@ -69,7 +69,8 @@
 				<p:column headerText="DESPACHAR">
 					<p:commandButton update=":form2:menuConfirmar"
 						action="#{beanSupervisor.actionCargarPedido(pc)}"
-						icon="pi pi-check" oncomplete="PF('menu').show()"  />
+						icon="pi pi-check" oncomplete="PF('menu').show()"
+						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado)}"  />
 				</p:column>
 			</p:dataTable>
 		</p:panel>
