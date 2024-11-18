@@ -5,6 +5,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
@@ -109,6 +113,21 @@ public class BeanPedidos implements Serializable {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
 		return "pedido";
+	}
+	
+	public void validarNombresApellidos(FacesContext context, UIComponent component, Object value) {
+	    String campo = (String) component.getAttributes().get("campo");
+		String nombresOApellidos = (String) value;
+
+	    // Expresión regular para validación de nombre
+	    String regex = "^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,}(\\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,})*$";
+	    
+	    // Validar con expresión regular
+	    if (nombresOApellidos != null && !nombresOApellidos.matches(regex)) {
+	        String mensaje = "El campo " + campo + " debe contener al mejor 3 letras, empezando con mayúscula";
+	        throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+	            "El campo Nombres debe contener al menos 3 letras por palabra, empezando con mayúscula", null));
+	    }
 	}
 
 	public String getCedula() {
