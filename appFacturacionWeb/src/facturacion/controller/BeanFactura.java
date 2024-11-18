@@ -2,6 +2,7 @@ package facturacion.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -182,7 +183,11 @@ public class BeanFactura implements Serializable {
 	
 	public List<FacturaCab> getListaFacturasCab(){
 		List<FacturaCab> listadoFacturas=managerFacturacion.findAllFacturaCab();
-		return listadoFacturas;
+		
+		//filtrar las facturas que no tienen detalles
+		return listadoFacturas.stream()
+				.filter(f -> f.getFacturaDets() != null && !f.getFacturaDets().isEmpty())
+				.collect(Collectors.toList());
 	}
 
 	public boolean isFacturaCabTmpGuardada() {
