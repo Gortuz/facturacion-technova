@@ -33,11 +33,12 @@
 					<h:outputText value="#{p.descripcion}" />
 					<p:commandButton
 						actionListener="#{beanPedidos.actionInsertarProducto(p)}"
-						update=":form2:carrito" icon="pi pi-shopping-cart" />
+						update=":form2:carrito :msg" icon="pi pi-shopping-cart" />
 				</h:panelGrid>
 			</p:panel>
 		</p:dataGrid>
 	</h:form>
+	<p:messages id="msg"></p:messages>
 	<br />
 	<h:form id="form2">
 		<h:panelGrid columns="2" style="width:50%">
