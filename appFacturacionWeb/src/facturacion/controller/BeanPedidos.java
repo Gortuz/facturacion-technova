@@ -35,6 +35,7 @@ public class BeanPedidos implements Serializable {
 	private ManagerPedidos managerPedidos;
 	
 	private PedidoCab pedidoCabTmp;
+	private String filtro;
 
 	public BeanPedidos() {
 
@@ -42,6 +43,7 @@ public class BeanPedidos implements Serializable {
 	@PostConstruct
 	public void iniciar(){
 		listaProductos=managerFacturacion.findAllProductos();
+		filtro = "";
 	}
 	
 	
@@ -118,6 +120,14 @@ public class BeanPedidos implements Serializable {
 		return "pedido";
 	}
 	
+	public void actionFiltrarProductos(){
+	    if (filtro == null || filtro.isEmpty()) {
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
+	}
+	
 	public void validarNombresApellidos(FacesContext context, UIComponent component, Object value) {
 	    String campo = (String) component.getAttributes().get("campo");
 		String nombresOApellidos = (String) value;
@@ -188,5 +198,12 @@ public class BeanPedidos implements Serializable {
 	public void setPedidoCabTmp(PedidoCab pedidoCabTmp) {
 		this.pedidoCabTmp = pedidoCabTmp;
 	}
+	public String getFiltro() {
+		return filtro;
+	}
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}
 
+	
 }
