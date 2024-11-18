@@ -61,6 +61,13 @@ public class BeanSupervisor implements Serializable {
 		}
 		return "";
 	}
+	public boolean despachado(String des) {
+	    return "Pedido despachado".equalsIgnoreCase(des != null ? des : "");
+	}
+
+	
+	
+	
 	public String actionDespacharPedido(PedidoCab pedidoCab){
 		try {
 			//invocamos a ManagerFacturacion para crear una nueva factura:
