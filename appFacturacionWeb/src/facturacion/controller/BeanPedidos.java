@@ -43,24 +43,27 @@ public class BeanPedidos implements Serializable {
 	public void iniciar(){
 		listaProductos=managerFacturacion.findAllProductos();
 	}
+	
+	
+	
 
 	public String actionComprobarCedula() {
 		try {
 			Cliente c = managerFacturacion.findClienteById(cedula);
 			// verificamos la existencia del cliente:
-			if (c == null)
-				return "registro";// debe registrarse
+			if(c.getClave().equals(clave)){
+				//caso contrario si ya existe el cliente, recuperamos la informacion
+				// para presentarla en la pagina de pedidos:
+				nombres = c.getNombres();
+				apellidos = c.getApellidos();
+				direccion = c.getDireccion();
+				//creamos el pedido temporal y asignamos el cliente automaticamente:
+				pedidoCabTmp=managerPedidos.crearPedidoTmp();
+				managerPedidos.asignarClientePedidoTmp(pedidoCabTmp, cedula);
+				return "pedido";
+			}
+			return "";
 			
-			//caso contrario si ya existe el cliente, recuperamos la informacion
-			// para presentarla en la pagina de pedidos:
-			nombres = c.getNombres();
-			apellidos = c.getApellidos();
-			direccion = c.getDireccion();
-			//creamos el pedido temporal y asignamos el cliente automaticamente:
-			pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			managerPedidos.asignarClientePedidoTmp(pedidoCabTmp, cedula);
-
-			return "pedido";
 		} catch (Exception e) {
 			// error no esperado:
 			e.printStackTrace();
