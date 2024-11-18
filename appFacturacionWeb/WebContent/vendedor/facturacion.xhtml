@@ -63,10 +63,14 @@
 							listener="#{beanFactura.verificarExistencia()}"></p:ajax>
 					</h:selectOneMenu>
 					<h:outputText value="Cantidad:" />
-					<p:inputText id="cantidad" value="#{beanFactura.cantidadProducto}"
-						oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-						<f:validateLongRange minimum="0" />
-					</p:inputText>
+					<p:inputNumber id="cantidad"
+						value="#{beanFactura.cantidadProducto}" size="10"
+						decimalPlaces="0" groupingUsed="false" thousandSeparator=""
+						decimalSeparator="" maxValue="999999999" required="true"
+						requiredMessage="Debe ingresar una cantidad.">					
+					</p:inputNumber>
+					
+
 					<p:commandButton value="adicionar"
 						action="#{beanFactura.insertarDetalle}" update="form3"
 						icon="pi pi-plus-circle" />
