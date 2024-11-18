@@ -58,17 +58,24 @@
 				<h:outputText value="#{p.precioUnitario}"></h:outputText>
 			</p:column>
 			<p:column headerText="ELIMINAR">
-    			<p:commandButton type="button" onclick="PF('cd').show()" icon="pi pi-times-circle"/>
-    			<p:confirmDialog message="¿Seguro deseas eliminar el producto #{p.nombre}?" header="Initiating destroy process" severity="alert" widgetVar="cd">
-        			<p:commandButton value="Confirmar" action="#{beanProductos.actionEliminarProducto(p)}" update="form2" oncomplete="PF('cd').hide()"/>
-        			<p:commandButton value="Cancelar" onclick="PF('cd').hide();" type="button" />
-    			</p:confirmDialog>
+				<p:commandButton action="#{beanProductos.actionObtenerProductoSeleccionado(p)}"
+						icon="pi pi-times-circle" update=":form2:menuEliminar"
+						oncomplete="PF('menu').show()" />
 			</p:column>
 			<p:column headerText="ACTUALIZAR">
 				<p:commandButton icon="pi pi-check-circle"
 					action="#{beanProductos.actionCargarProducto(p)}" update=":form2"></p:commandButton>
 			</p:column>
 		</p:dataTable>
+			<p:confirmDialog 
+				message="¿Seguro deseas eliminar el producto #{beanProductos.productoSelecionado.codigoProducto}?" 
+				header="Eliminar producto" 
+				severity="alert" 
+				widgetVar="menu"
+				id="menuEliminar">
+        			<p:commandButton value="Confirmar" action="#{beanProductos.actionEliminarProducto()}" update="form2" oncomplete="PF('menu').hide()"/>
+        			<p:commandButton value="Cancelar" onclick="PF('menu').hide();" type="button" />
+    		</p:confirmDialog>
 	</h:form>
 </body>
 </html>
