@@ -14,6 +14,9 @@ import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 @Named
 @SessionScoped
 public class BeanPedidos implements Serializable {
@@ -44,19 +47,19 @@ public class BeanPedidos implements Serializable {
 		try {
 			Cliente c = managerFacturacion.findClienteById(cedula);
 			// verificamos la existencia del cliente:
-			if (c == null)
-				return "registro";// debe registrarse
+			if(c.getClave().equals(clave)){
+				//caso contrario si ya existe el cliente, recuperamos la informacion
+				// para presentarla en la pagina de pedidos:
+				nombres = c.getNombres();
+				apellidos = c.getApellidos();
+				direccion = c.getDireccion();
+				//creamos el pedido temporal y asignamos el cliente automaticamente:
+				pedidoCabTmp=managerPedidos.crearPedidoTmp();
+				managerPedidos.asignarClientePedidoTmp(pedidoCabTmp, cedula);
+				return "pedido";
+			}
+			return "";
 			
-			//caso contrario si ya existe el cliente, recuperamos la informacion
-			// para presentarla en la pagina de pedidos:
-			nombres = c.getNombres();
-			apellidos = c.getApellidos();
-			direccion = c.getDireccion();
-			//creamos el pedido temporal y asignamos el cliente automaticamente:
-			pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			managerPedidos.asignarClientePedidoTmp(pedidoCabTmp, cedula);
-
-			return "pedido";
 		} catch (Exception e) {
 			// error no esperado:
 			e.printStackTrace();
@@ -67,9 +70,17 @@ public class BeanPedidos implements Serializable {
 
 	public String actionInsertarCliente() {
 		try {
-			managerFacturacion.insertarCliente(cedula, nombres, apellidos,
-					direccion, clave);
-			return "pedido";
+			Cliente c = managerFacturacion.findClienteById(cedula);
+			if(c==null) {
+				managerFacturacion.insertarCliente(cedula, nombres, apellidos,
+						direccion, clave);
+				return "pedido";
+			}else {
+				FacesContext.getCurrentInstance().addMessage(null, 
+		                new FacesMessage(FacesMessage.SEVERITY_INFO, "Ya existe un usuario con esta cédula.", null));
+				return "";
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeERROR(e.getMessage());

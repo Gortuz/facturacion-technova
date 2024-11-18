@@ -34,7 +34,11 @@
 				<p:message for="clave" />
 			</h:panelGrid>
 			<p:commandButton value="Registrar"
-				action="#{beanPedidos.actionInsertarCliente()}" update="panel1" />
+				action="#{beanPedidos.actionInsertarCliente()}" update="panel1"
+				style="margin-right: 20px;" />
+			<p:commandButton action="index" value="Regresar" immediate="true"
+				process="@this" />
+
 			<p:messages />
 		</p:panel>
 	</h:form>
