@@ -104,14 +104,15 @@
 				</f:facet>
 						<h:outputText value="#{d.cantidad}" />
 					</p:column>
-					<p:column style="width:120px;text-align:right">
+					<p:column
+						style="min-width:200px; text-align:right">
 						<f:facet name="header">
-					SUBTOTAL
-				</f:facet>
+       			 	SUBTOTAL
+    			</f:facet>
 						<h:outputText value="#{d.precioUnitarioVenta * d.cantidad}"
 							style="text-align:right" />
 						<f:facet name="footer">
-							<h:panelGrid columns="2"
+							<h:panelGrid columns="2" 
 								style="font-weight: bold; text-align:right">
 								<h:outputText value="SUMA:" />
 								<h:outputText value="#{beanFactura.facturaCabTmp.subtotal}">
@@ -131,6 +132,7 @@
 							</h:panelGrid>
 						</f:facet>
 					</p:column>
+
 				</p:dataTable>
 			</p:panel>
 		</h:form>
