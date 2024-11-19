@@ -6,10 +6,10 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Facturacion</title>
+	<title>Facturación</title>
 </h:head>
 <body style="font-size: 70%">
-	<h2>Facturacion</h2>
+	<h2>Facturación</h2>
 	<h:form id="form1">
 		<p:commandButton value="Salir" action="#{beanLogin.salirSistema()}"
 			icon="pi pi-sign-out" />
@@ -38,7 +38,7 @@
 								listener="#{beanFactura.asignarCliente()}"></p:ajax>
 						</p:selectOneMenu>
 					</h:panelGroup>
-					<h:outputText value="Codigo del cliente:" style="font-weight: bold" />
+					<h:outputText value="Código del cliente:" style="font-weight: bold" />
 					<h:outputText id="cedulaCliente"
 						value="#{beanFactura.cedulaCliente}" />
 					<h:commandButton value="Guardar factura"
@@ -76,7 +76,7 @@
 					</f:facet>
 					<p:column style="width:60px">
 						<f:facet name="header">
-					CODIGO
+					CÓDIGO
 				</f:facet>
 						<h:outputText value="#{d.producto.codigoProducto}" />
 					</p:column>
@@ -88,7 +88,7 @@
 					</p:column>
 					<p:column>
 						<f:facet name="header">
-					DESCRIPCION
+					DESCRIPCIÓN
 				</f:facet>
 						<h:outputText value="#{d.producto.descripcion}" />
 					</p:column>
