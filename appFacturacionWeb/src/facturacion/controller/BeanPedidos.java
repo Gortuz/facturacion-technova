@@ -93,15 +93,20 @@ public class BeanPedidos implements Serializable {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
 	}
-	public String actionGuardarPedido(){
-		try {
-			managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
-		} catch (Exception e) {
-			e.printStackTrace();
-			JSFUtil.crearMensajeERROR(e.getMessage());
-		}
-		return "pedido_imprimir";
+	public String actionGuardarPedido() {
+	    try {
+	        if (pedidoCabTmp == null || pedidoCabTmp.getPedidoDets().isEmpty()) {
+	            JSFUtil.crearMensajeERROR("El carrito está vacío. Por favor, agregue productos antes de continuar.");
+	            return "";
+	        }
+	        managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JSFUtil.crearMensajeERROR(e.getMessage());
+	    }
+	    return "pedido_imprimir";
 	}
+
 	public String actionCerrarPedido(){
 		pedidoCabTmp=null;
 		//creamos el pedido temporal y asignamos el cliente automaticamente:
