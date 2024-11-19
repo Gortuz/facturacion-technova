@@ -17,8 +17,6 @@
 	<p:panel id="panel1">
 		<h:form id="form2">
 			<p:panel header="Datos de la factura">
-				<p:commandButton action="#{beanFactura.crearNuevaFactura()}"
-					value="Crear nueva factura" update="form2 :form3" />
 				<p:panelGrid columns="2">
 					<h:outputText value="Nro. de factura:" style="font-weight: bold" />
 					<h:outputText value="#{beanFactura.facturaCabTmp.numeroFactura}" />
@@ -42,7 +40,8 @@
 					<h:outputText id="cedulaCliente"
 						value="#{beanFactura.cedulaCliente}" />
 					<h:commandButton value="Guardar factura"
-						action="#{beanFactura.guardarFactura()}" />
+						action="#{beanFactura.guardarFactura()}" 
+						   styleClass="ui-btn-success"/>
 					<p:messages id="mensajes" />
 					<h:commandButton value="Imprimir"
 						rendered="#{beanFactura.facturaCabTmpGuardada}" type="button"
