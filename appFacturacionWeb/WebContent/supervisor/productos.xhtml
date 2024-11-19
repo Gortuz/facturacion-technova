@@ -48,6 +48,15 @@
 				update=":form2,panelGrid1"></p:commandButton>
 		</h:form>
 	</p:panel>
+	<h:form>
+        <h:panelGrid columns="3">
+			<h:outputText value="BUSCAR POR NOMBRE: " />
+			<p:inputText value="#{beanProductos.filtro}" />
+			<p:commandButton icon="pi pi-search" value="Buscar"
+			        action="#{beanProductos.actionFiltrarProductos}"
+			        update=":form2:tabla1 :form2" />
+        </h:panelGrid>
+	</h:form>
 	<h:form id="form2">
 	<h:form id="formExport">
         			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">

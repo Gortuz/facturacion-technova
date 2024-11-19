@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -48,6 +49,25 @@ public class ManagerFacturacion {
 	public List<Producto> findAllProductos(){
 		return managerDAO.findAll(Producto.class, "o.nombre");
 	}
+	
+	/**
+     * Metodo finder para consulta de productos filtrada por nombre.
+     * Hace uso del componente {@link facturacion.model.manager.ManagerDAO ManagerDAO} de la capa model.
+     * @return listado de Productos filtrado y ordenado por nombre.
+     */
+    @SuppressWarnings("unchecked")
+    public List<Producto> findAllProductosByFilter(String name) {
+        // Recuperar todos los productos de la base de datos
+        List<Producto> todosLosProductos = managerDAO.findAll(Producto.class);
+        if (name == null || name.isEmpty()) {
+            // Si no hay filtro, devolver la lista completa
+            return todosLosProductos;
+        }
+        // Filtrar los productos usando Streams
+        return todosLosProductos.stream()
+                .filter(p -> p.getNombre() != null && p.getNombre().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+    }
 	
 	/**
 	 * Metodo finder para consulta de productos.
