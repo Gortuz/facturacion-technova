@@ -13,6 +13,7 @@ import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.PedidoCab;
+import facturacion.model.dao.entities.PedidoDet;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
@@ -36,6 +37,7 @@ public class BeanPedidos implements Serializable {
 	private ManagerPedidos managerPedidos;
 	
 	private PedidoCab pedidoCabTmp;
+	private String filtro;
 
 	public BeanPedidos() {
 
@@ -43,25 +45,29 @@ public class BeanPedidos implements Serializable {
 	@PostConstruct
 	public void iniciar(){
 		listaProductos=managerFacturacion.findAllProductos();
+		filtro = "";
 	}
+	
+	
+	
 
 	public String actionComprobarCedula() {
 		try {
 			Cliente c = managerFacturacion.findClienteById(cedula);
 			// verificamos la existencia del cliente:
-			if (c == null)
-				return "registro";// debe registrarse
+			if(c.getClave().equals(clave)){
+				//caso contrario si ya existe el cliente, recuperamos la informacion
+				// para presentarla en la pagina de pedidos:
+				nombres = c.getNombres();
+				apellidos = c.getApellidos();
+				direccion = c.getDireccion();
+				//creamos el pedido temporal y asignamos el cliente automaticamente:
+				pedidoCabTmp=managerPedidos.crearPedidoTmp();
+				managerPedidos.asignarClientePedidoTmp(pedidoCabTmp, cedula);
+				return "pedido";
+			}
+			return "";
 			
-			//caso contrario si ya existe el cliente, recuperamos la informacion
-			// para presentarla en la pagina de pedidos:
-			nombres = c.getNombres();
-			apellidos = c.getApellidos();
-			direccion = c.getDireccion();
-			//creamos el pedido temporal y asignamos el cliente automaticamente:
-			pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			managerPedidos.asignarClientePedidoTmp(pedidoCabTmp, cedula);
-
-			return "pedido";
 		} catch (Exception e) {
 			// error no esperado:
 			e.printStackTrace();
@@ -81,6 +87,16 @@ public class BeanPedidos implements Serializable {
 		}
 		return "";
 
+	}
+	public void actionEliminarProducto(PedidoDet p){
+		try {
+			if(pedidoCabTmp!=null)
+			//eliminamos un producto del carrito de compras:
+			managerPedidos.eliminarDetallePedidoTmp(pedidoCabTmp,p);
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSFUtil.crearMensajeERROR(e.getMessage());
+		}
 	}
 	
 	public void actionInsertarProducto(Producto p){
@@ -130,6 +146,14 @@ public class BeanPedidos implements Serializable {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
 		return "pedido";
+	}
+	
+	public void actionFiltrarProductos(){
+	    if (filtro == null || filtro.isEmpty()) {
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
 	}
 	
 	public void validarNombresApellidos(FacesContext context, UIComponent component, Object value) {
@@ -202,5 +226,12 @@ public class BeanPedidos implements Serializable {
 	public void setPedidoCabTmp(PedidoCab pedidoCabTmp) {
 		this.pedidoCabTmp = pedidoCabTmp;
 	}
+	public String getFiltro() {
+		return filtro;
+	}
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}
 
+	
 }

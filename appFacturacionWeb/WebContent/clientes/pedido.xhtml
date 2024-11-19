@@ -20,9 +20,20 @@
 			value="#{beanPedidos.nombres} #{beanPedidos.apellidos} - #{beanPedidos.direccion}" />
 	</p:panel>
 	<br />
+	<h:form>
+		<h:panelGrid columns="3">
+			<h:outputLabel value="Buscar por nombre: " />
+			<p:inputText value="#{beanPedidos.filtro}" />
+			<p:commandButton icon="pi pi-search" value="Buscar"
+				action="#{beanPedidos.actionFiltrarProductos}"
+				update=":form1:dataGridId" />
+		</h:panelGrid>
+	</h:form>
+	<br />
 	<h:form id="form1">
-		<p:dataGrid value="#{beanPedidos.listaProductos}" var="p" columns="4"
-			rows="8" paginator="true" rowsPerPageTemplate="4,8,12">
+		<p:dataGrid id="dataGridId" value="#{beanPedidos.listaProductos}"
+			var="p" columns="4" rows="8" paginator="true"
+			rowsPerPageTemplate="4,8,12">
 			<f:facet name="header">
 				<h:outputText value="Seleccione los productos:" />
 			</f:facet>
@@ -54,7 +65,11 @@
 					<p:column style="width:60px;text-align:right">
 						<h:outputText value="#{det.cantidad}" />
 					</p:column>
-					
+					<p:column>
+						<p:commandButton
+						actionListener="#{beanPedidos.actionEliminarProducto(det)}"
+						update=":form2:carrito" icon="pi pi-trash" />
+					</p:column>
 				</p:dataTable>
 			</p:panel>
 			<h:panelGrid style="text-align:center">
