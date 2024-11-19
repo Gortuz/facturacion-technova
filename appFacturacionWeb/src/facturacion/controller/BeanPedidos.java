@@ -16,8 +16,9 @@ import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
+import facturacion.model.dao.entities.PedidoDet;
 import java.io.Serializable;
-
+import java.math.BigDecimal;
 @Named
 @SessionScoped
 public class BeanPedidos implements Serializable {
@@ -84,10 +85,23 @@ public class BeanPedidos implements Serializable {
 	
 	public void actionInsertarProducto(Producto p){
 		try {
+			System.out.println("EEEEEEEH");
+			boolean bandera=true;
 			if(pedidoCabTmp==null)
 				pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			//agregamos un nuevo producto al carrito de compras:
-			managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
+			for (PedidoDet pedidoDet : pedidoCabTmp.getPedidoDets()) {
+				if(pedidoDet.getProducto().getCodigoProducto()==(p.getCodigoProducto())) {	
+					pedidoDet.setCantidad(pedidoDet.getCantidad()+1);
+					//pedidoDet.setPrecioUnitarioVenta(pedidoDet.getPrecioUnitarioVenta());
+					bandera=false;
+					System.out.println("AAAAAAH");
+				}
+			}
+			if(bandera) {
+				//agregamos un nuevo producto al carrito de compras:
+				managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeERROR(e.getMessage());
