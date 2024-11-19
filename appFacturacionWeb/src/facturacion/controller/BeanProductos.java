@@ -8,6 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import facturacion.model.manager.ManagerFacturacion;
+
 import facturacion.model.dao.entities.Producto;
 import java.io.Serializable;
 
@@ -25,7 +26,7 @@ public class BeanProductos implements Serializable {
 	private String nombre;
 	private BigDecimal precioUnitario;
 	private String tieneImpuesto;
-	
+	private Producto productoSelecionado;
 	
 	public BeanProductos(){
 		
@@ -62,6 +63,9 @@ public class BeanProductos implements Serializable {
 		}
 		return "";
 	}
+	public String actionEliminarProducto(){
+		return actionEliminarProducto(productoSelecionado);
+	}
 	public String actionCargarProducto(Producto producto){
 		codigoProducto=producto.getCodigoProducto();
 		descripcion=producto.getDescripcion();
@@ -92,6 +96,16 @@ public class BeanProductos implements Serializable {
 			e.printStackTrace();
 		}
 		return "productos";
+	}
+	
+	public String actionObtenerProductoSeleccionado(Producto producto){
+		try {
+			//capturamos el valor enviado desde el DataTable:
+			productoSelecionado = producto;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public List<Producto> getListaProductos(){
@@ -134,6 +148,12 @@ public class BeanProductos implements Serializable {
 	public void setTieneImpuesto(String tieneImpuesto) {
 		this.tieneImpuesto = tieneImpuesto;
 	}
-	
-	
+
+	public Producto getProductoSelecionado() {
+		return productoSelecionado;
+	}
+
+	public void setProductoSelecionado(Producto productoSelecionado) {
+		this.productoSelecionado = productoSelecionado;
+	}	
 }
