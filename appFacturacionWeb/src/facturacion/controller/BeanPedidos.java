@@ -85,7 +85,6 @@ public class BeanPedidos implements Serializable {
 	
 	public void actionInsertarProducto(Producto p){
 		try {
-			System.out.println("EEEEEEEH");
 			boolean bandera=true;
 			if(pedidoCabTmp==null)
 				pedidoCabTmp=managerPedidos.crearPedidoTmp();
@@ -94,7 +93,6 @@ public class BeanPedidos implements Serializable {
 					pedidoDet.setCantidad(pedidoDet.getCantidad()+1);
 					//pedidoDet.setPrecioUnitarioVenta(pedidoDet.getPrecioUnitarioVenta());
 					bandera=false;
-					System.out.println("AAAAAAH");
 				}
 			}
 			if(bandera) {
