@@ -5,6 +5,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
@@ -34,6 +38,7 @@ public class BeanPedidos implements Serializable {
 	private ManagerPedidos managerPedidos;
 	
 	private PedidoCab pedidoCabTmp;
+	private String filtro;
 
 	public BeanPedidos() {
 
@@ -41,7 +46,11 @@ public class BeanPedidos implements Serializable {
 	@PostConstruct
 	public void iniciar(){
 		listaProductos=managerFacturacion.findAllProductos();
+		filtro = "";
 	}
+	
+	
+	
 
 	public String actionComprobarCedula() {
 		try {
@@ -121,6 +130,29 @@ public class BeanPedidos implements Serializable {
 		}
 		return "pedido";
 	}
+	
+	public void actionFiltrarProductos(){
+	    if (filtro == null || filtro.isEmpty()) {
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
+	}
+	
+	public void validarNombresApellidos(FacesContext context, UIComponent component, Object value) {
+	    String campo = (String) component.getAttributes().get("campo");
+		String nombresOApellidos = (String) value;
+
+	    // Expresión regular para validación de nombre
+	    String regex = "^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,}(\\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,})*$";
+	    
+	    // Validar con expresión regular
+	    if (nombresOApellidos != null && !nombresOApellidos.matches(regex)) {
+	        String mensaje = "El campo " + campo + " debe contener al mejor 3 letras, empezando con mayúscula";
+	        throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+	            "El campo Nombres debe contener al menos 3 letras por palabra, empezando con mayúscula", null));
+	    }
+	}
 
 	public String getCedula() {
 		return cedula;
@@ -177,5 +209,12 @@ public class BeanPedidos implements Serializable {
 	public void setPedidoCabTmp(PedidoCab pedidoCabTmp) {
 		this.pedidoCabTmp = pedidoCabTmp;
 	}
+	public String getFiltro() {
+		return filtro;
+	}
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}
 
+	
 }

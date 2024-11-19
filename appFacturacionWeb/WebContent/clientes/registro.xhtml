@@ -15,16 +15,30 @@
 				<h:outputText value="Ingrese su cedula" />
 				<p:inputText id="cedula" value="#{beanPedidos.cedula}" size="10"
 					maxlength="10" required="true"
-					requiredMessage="Debe ingresar la cedula." />
+					requiredMessage="Debe ingresar la cedula."
+					validatorMessage="La cédula debe tener exactamente 10 caracteres">
+					<f:validateLength minimum="10" maximum="10"></f:validateLength>	
+				</p:inputText>
 				<p:message for="cedula" />
+				
 				<h:outputText value="Nombres" />
-				<p:inputText id="nombres" value="#{beanPedidos.nombres}"
-					required="true" requiredMessage="Debe ingresar sus nombres." />
-				<p:message for="nombres" />
+				<p:inputText id="nombres" value="#{beanPedidos.nombres}" 
+				    required="true" requiredMessage="Debe colocar los nombres"
+				    validator="#{beanPedidos.validarNombresApellidos}">
+				    <f:attribute name="campo" value="Nombres" />
+				    <p:ajax event="blur" process="@this" update="nombresMessage" />
+				</p:inputText>
+				<p:message id="nombresMessage" for="nombres" />
+				
 				<h:outputText value="Apellidos" />
-				<p:inputText id="apellidos" value="#{beanPedidos.apellidos}"
-					required="true" requiredMessage="Debe ingresar sus apellidos." />
-				<p:message for="apellidos" />
+				<p:inputText id="apellidos" value="#{beanPedidos.apellidos}" 
+				    required="true" requiredMessage="Debe colocar los apellidos"
+				    validator="#{beanPedidos.validarNombresApellidos}">
+				    <f:attribute name="campo" value="Apellidos" />
+				    <p:ajax event="blur" process="@this" update="apellidosMessage" />
+				</p:inputText>
+				<p:message id="apellidosMessage" for="apellidos" />
+				
 				<h:outputText value="Direccion" />
 				<p:inputText value="#{beanPedidos.direccion}" />
 				<h:outputText value="" />
@@ -33,6 +47,7 @@
 					requiredMessage="Debe ingresar su contraseña." />
 				<p:message for="clave" />
 			</h:panelGrid>
+			
 			<p:commandButton value="Registrar"
 				action="#{beanPedidos.actionInsertarCliente()}" update="panel1"
 				style="margin-right: 20px;" />
