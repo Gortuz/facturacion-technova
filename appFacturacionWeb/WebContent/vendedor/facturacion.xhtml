@@ -25,7 +25,7 @@
 					<h:outputText value="Fecha de la factura:"
 						style="font-weight: bold" />
 					<h:outputText value="#{beanFactura.facturaCabTmp.fechaEmision}">
-						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+						 <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Guayaquil" />
 					</h:outputText>
 					<h:outputText value="Seleccione el cliente:"
 						style="font-weight: bold" />
@@ -63,7 +63,14 @@
 							listener="#{beanFactura.verificarExistencia()}"></p:ajax>
 					</h:selectOneMenu>
 					<h:outputText value="Cantidad:" />
-					<h:inputText value="#{beanFactura.cantidadProducto}" />
+					<p:inputNumber id="cantidad"
+						value="#{beanFactura.cantidadProducto}" size="10"
+						decimalPlaces="0" groupingUsed="false" thousandSeparator=""
+						decimalSeparator="" maxValue="999999999" required="true"
+						requiredMessage="Debe ingresar una cantidad.">					
+					</p:inputNumber>
+					
+
 					<p:commandButton value="adicionar"
 						action="#{beanFactura.insertarDetalle}" update="form3"
 						icon="pi pi-plus-circle" />
@@ -96,7 +103,9 @@
 						<f:facet name="header">
 					P/U
 				</f:facet>
-						<h:outputText value="#{d.precioUnitarioVenta}" />
+						<h:outputText value="#{d.precioUnitarioVenta}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+						  </h:outputText>
 					</p:column>
 					<p:column style="width:40px">
 						<f:facet name="header">
@@ -104,33 +113,37 @@
 				</f:facet>
 						<h:outputText value="#{d.cantidad}" />
 					</p:column>
-					<p:column style="width:120px;text-align:right">
+					<p:column
+						style="min-width:200px; text-align:right">
 						<f:facet name="header">
-					SUBTOTAL
-				</f:facet>
+       			 	SUBTOTAL
+    			</f:facet>
 						<h:outputText value="#{d.precioUnitarioVenta * d.cantidad}"
-							style="text-align:right" />
+							style="text-align:right" >
+							<f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+						  </h:outputText>
 						<f:facet name="footer">
-							<h:panelGrid columns="2"
+							<h:panelGrid columns="2" 
 								style="font-weight: bold; text-align:right">
 								<h:outputText value="SUMA:" />
 								<h:outputText value="#{beanFactura.facturaCabTmp.subtotal}">
-									<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+										<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
 										currencySymbol="$" />
 								</h:outputText>
 								<h:outputText value="IVA:" />
 								<h:outputText value="#{beanFactura.facturaCabTmp.valorIva}">
-									<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+									  	<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
 										currencySymbol="$" />
 								</h:outputText>
 								<h:outputText value="TOTAL:" />
 								<h:outputText value="#{beanFactura.facturaCabTmp.total}">
-									<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+									  	<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
 										currencySymbol="$" />
 								</h:outputText>
 							</h:panelGrid>
 						</f:facet>
 					</p:column>
+
 				</p:dataTable>
 			</p:panel>
 		</h:form>

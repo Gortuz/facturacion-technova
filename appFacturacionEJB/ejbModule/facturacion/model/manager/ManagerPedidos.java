@@ -215,6 +215,14 @@ public class ManagerPedidos {
 		// verificamos los campos calculados:
 		calcularPedidoTmp(pedidoCabTmp);
 	}
+	
+	public void eliminarDetallePedidoTmp(PedidoCab pedidoCabTmp,
+			PedidoDet Producto) throws Exception {
+		// buscamos el producto:
+		pedidoCabTmp.removePedidoDet(Producto);
+		// recalculmos el subtotal de pedido:
+		calcularPedidoTmp(pedidoCabTmp);
+	}
 
 	/**
 	 * Guarda en la base de datos un pedido.
