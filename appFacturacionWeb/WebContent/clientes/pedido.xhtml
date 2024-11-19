@@ -31,9 +31,9 @@
 					<h:outputText value="#{p.nombre}" />
 					<h:outputText value="$#{p.precioUnitario}" />
 					<h:outputText value="#{p.descripcion}" />
-					<p:commandButton
-						actionListener="#{beanPedidos.actionInsertarProducto(p)}"
-						update=":form2:carrito :msg" icon="pi pi-shopping-cart" />
+					<p:commandButton actionListener="#{beanPedidos.actionInsertarProducto(p)}" 
+					update=":form2:carrito :form2:continuarButton :msg" 
+					icon="pi pi-shopping-cart" />
 				</h:panelGrid>
 			</p:panel>
 		</p:dataGrid>
@@ -56,8 +56,9 @@
 			<h:panelGrid style="text-align:center">
 				<h:outputText
 					value="Una vez que seleccione los productos puede confirmar su pedido: " />
-				<p:commandButton icon="ui-icon-circle-arrow-e" value="Continuar"
-					action="confirmacion"></p:commandButton>
+			<p:commandButton id="continuarButton" icon="ui-icon-circle-arrow-e" value="Continuar" 
+			action="confirmacion" disabled="#{beanPedidos.pedidoCabTmp == null or empty beanPedidos.pedidoCabTmp.pedidoDets}" 
+			update="carrito continuarButton" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</h:form>
