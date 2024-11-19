@@ -62,6 +62,11 @@
 					<p:column style="width:60px;text-align:right">
 						<h:outputText value="#{det.producto.precioUnitario}" />
 					</p:column>
+					<p:column style="width:60px;text-align:right">
+						<p:commandButton
+						actionListener="#{beanPedidos.actionEliminarProducto(det)}"
+						update=":form2:carrito" icon="pi pi-trash" />
+					</p:column>
 				</p:dataTable>
 			</p:panel>
 			<h:panelGrid style="text-align:center">
