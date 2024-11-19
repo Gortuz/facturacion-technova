@@ -92,7 +92,7 @@ public class BeanPedidos implements Serializable {
 			for (PedidoDet pedidoDet : pedidoCabTmp.getPedidoDets()) {
 				if(pedidoDet.getProducto().getCodigoProducto()==(p.getCodigoProducto())) {	
 					pedidoDet.setCantidad(pedidoDet.getCantidad()+1);
-					pedidoDet.setPrecioUnitarioVenta(pedidoDet.getPrecioUnitarioVenta().multiply(new BigDecimal(2)));
+					//pedidoDet.setPrecioUnitarioVenta(pedidoDet.getPrecioUnitarioVenta());
 					bandera=false;
 					System.out.println("AAAAAAH");
 				}
