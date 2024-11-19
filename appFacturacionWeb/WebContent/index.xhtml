@@ -10,7 +10,7 @@
 </h:head>
 <h:body style="font-size:80%">
 	<h:form>
-		<p:panel header="Sistema de facturacion">
+		<p:panel header="Sistema de facturación">
 			<h:panelGrid columns="2">
 				<p:menu>
 					<p:submenu label="Opciones del sistema">
@@ -40,15 +40,15 @@
 							utilizada en esta demo.
 						</li>
 						<li>En el manejo de productos se utilizan <b>Actions</b> con
-							parametros, la cual es una nueva caracteristica de JSF 2.x y nos
+							parámetros, la cual es una nueva característica de JSF 2.x y nos
 							permite evitar <b>binding</b> con los DataTables.
 						</li>
 						<li>Las <b>Entities</b> fueron generadas automaticamente y se
 							personalizo la entidad <b>FacturaCab</b>. En esta clase se
-							adiciono el parametro <b>cascade=CascadeType.ALL</b> en la
-							relacion <b>@OneToMany</b> con <b>FacturaDet</b> para poder
+							adicionó el parámetro <b>cascade=CascadeType.ALL</b> en la
+							relación <b>@OneToMany</b> con <b>FacturaDet</b> para poder
 							insertar en cascada (cabecera y detalles de factura) en una sola
-							transaccion.
+							transacción.
 						</li>
 					</ul>
 				</p:panel>
