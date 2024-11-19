@@ -57,6 +57,9 @@
 			<p:column headerText="PRECIO">
 				<h:outputText value="#{p.precioUnitario}"></h:outputText>
 			</p:column>
+			<p:column headerText="STOCK">
+    			<h:outputText value="#{p.existencia}"></h:outputText>
+			</p:column>
 			<p:column headerText="ELIMINAR">
 				<p:commandButton action="#{beanProductos.actionObtenerProductoSeleccionado(p)}"
 						icon="pi pi-times-circle" update=":form2:menuEliminar"
