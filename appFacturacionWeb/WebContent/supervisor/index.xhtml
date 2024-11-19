@@ -39,11 +39,17 @@
 		</p:panelGrid>
 	</h:form>
 	<br />
+
 	<p:messages id="mensajes" autoUpdate="true" />
 	<h:form id="form2">
 		<p:panel header="Resultado de la búsqueda:" id="panel1">
-			<p:dataTable value="#{beanSupervisor.listaPedidoCab}" var="pc"
-				paginator="true">
+				<h:form id="formExport">
+        			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
+        				<p:dataExporter type="csv" target=":form2:dataTable" fileName="Pedidos" />
+    				</p:commandButton>
+				</h:form>
+			<p:dataTable id="dataTable" value="#{beanSupervisor.listaPedidoCab}" var="pc"
+				paginator="true" rows="15">
 				<p:column headerText="NUM PEDIDO">
 					<h:outputText value="#{pc.numeroPedido}" />
 				</p:column>
