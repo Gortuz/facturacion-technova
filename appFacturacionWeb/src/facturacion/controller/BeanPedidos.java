@@ -99,27 +99,28 @@ public class BeanPedidos implements Serializable {
 		}
 	}
 	
-	public void actionInsertarProducto(Producto p){
-		try {
-			boolean bandera=true;
-			if(pedidoCabTmp==null)
-				pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			for (PedidoDet pedidoDet : pedidoCabTmp.getPedidoDets()) {
-				if(pedidoDet.getProducto().getCodigoProducto()==(p.getCodigoProducto())) {	
-					pedidoDet.setCantidad(pedidoDet.getCantidad()+1);
-					//pedidoDet.setPrecioUnitarioVenta(pedidoDet.getPrecioUnitarioVenta());
-					bandera=false;
-				}
-			}
-			if(bandera) {
-				//agregamos un nuevo producto al carrito de compras:
-				managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			JSFUtil.crearMensajeERROR(e.getMessage());
-		}
+	public void actionInsertarProducto(Producto p) {
+	    try {
+	        if (pedidoCabTmp == null) {
+	            pedidoCabTmp = managerPedidos.crearPedidoTmp();
+	        }
+	        boolean encontrado = false;
+	        for (PedidoDet detalle : pedidoCabTmp.getPedidoDets()) {
+	            if (detalle.getProducto().getCodigoProducto().equals(p.getCodigoProducto())) {
+	                detalle.setCantidad(detalle.getCantidad() + 1);
+	                encontrado = true;
+	                break;
+	            }
+	        }
+	        if (!encontrado) {
+	            managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
+	        }
+	        managerPedidos.calcularPedidoTmp(pedidoCabTmp);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JSFUtil.crearMensajeERROR(e.getMessage());
+	    }
 	}
 	public String actionGuardarPedido() {
 	    try {
