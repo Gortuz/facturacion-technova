@@ -215,7 +215,7 @@ public class ManagerPedidos {
 		// verificamos los campos calculados:
 		calcularPedidoTmp(pedidoCabTmp);
 	}
-	
+
 	public void eliminarDetallePedidoTmp(PedidoCab pedidoCabTmp,
 			PedidoDet Producto) throws Exception {
 		// buscamos el producto:

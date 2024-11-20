@@ -19,9 +19,6 @@ import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
 import java.io.Serializable;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-
 @Named
 @SessionScoped
 public class BeanPedidos implements Serializable {
@@ -98,19 +95,6 @@ public class BeanPedidos implements Serializable {
 		return "";
 
 	}
-	
-	public void actionInsertarProducto(Producto p){
-		try {
-			if(pedidoCabTmp==null)
-				pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			//agregamos un nuevo producto al carrito de compras:
-			managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
-		} catch (Exception e) {
-			e.printStackTrace();
-			JSFUtil.crearMensajeERROR(e.getMessage());
-		}
-	}
-	
 	public void actionEliminarProducto(PedidoDet p){
 		try {
 			if(pedidoCabTmp!=null)
@@ -122,15 +106,43 @@ public class BeanPedidos implements Serializable {
 		}
 	}
 	
-	public String actionGuardarPedido(){
+	public void actionInsertarProducto(Producto p){
 		try {
-			managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
+			boolean bandera=true;
+			if(pedidoCabTmp==null)
+				pedidoCabTmp=managerPedidos.crearPedidoTmp();
+			for (PedidoDet pedidoDet : pedidoCabTmp.getPedidoDets()) {
+				if(pedidoDet.getProducto().getCodigoProducto()==(p.getCodigoProducto())) {	
+					pedidoDet.setCantidad(pedidoDet.getCantidad()+1);
+					//pedidoDet.setPrecioUnitarioVenta(pedidoDet.getPrecioUnitarioVenta());
+					bandera=false;
+				}
+			}
+			if(bandera) {
+				//agregamos un nuevo producto al carrito de compras:
+				managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
-		return "pedido_imprimir";
 	}
+		
+	public String actionGuardarPedido() {
+	    try {
+	        if (pedidoCabTmp == null || pedidoCabTmp.getPedidoDets().isEmpty()) {
+	            JSFUtil.crearMensajeERROR("El carrito está vacío. Por favor, agregue productos antes de continuar.");
+	            return "";
+	        }
+	        managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JSFUtil.crearMensajeERROR(e.getMessage());
+	    }
+	    return "pedido_imprimir";
+	}
+
 	public String actionCerrarPedido(){
 		pedidoCabTmp=null;
 		//creamos el pedido temporal y asignamos el cliente automaticamente:
