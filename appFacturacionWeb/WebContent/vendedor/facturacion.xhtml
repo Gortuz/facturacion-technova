@@ -50,12 +50,26 @@
 						value="#{beanFactura.cedulaCliente}" />
 					<h:commandButton styleClass="no-print" value="Guardar factura"
 						action="#{beanFactura.guardarFactura()}" />
-					<p:messages styleClass="no-print" id="mensajes" />
-					<h:commandButton styleClass="no-print" value="Imprimir"
-						rendered="#{beanFactura.facturaCabTmpGuardada}" type="button"
-						icon="pi pi-print">
-						<p:printer target=":panel1" />
-					</h:commandButton>
+
+					<p:messages id="mensajes" />
+
+					<p:commandButton value="Imprimir" icon="pi pi-print" type="button"
+					rendered="#{beanFactura.facturaCabTmpGuardada}" 
+                 	onclick="imprimirFactura();"/>
+
+<h:form id="formImprimir">
+  
+  
+        <iframe id="iframeImprimir" src="facturacion_imprimir.xhtml" style="display:none;"></iframe>
+    </h:form>
+
+    <script type="text/javascript">
+        function imprimirFactura() {
+            var iframe = document.getElementById('iframeImprimir');
+            iframe.contentWindow.print(); // Llama a la función de impresión del iframe
+        }
+    </script>
+
 				</p:panelGrid>
 			</p:panel>
 		</h:form>
