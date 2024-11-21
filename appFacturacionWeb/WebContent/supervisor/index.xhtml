@@ -48,11 +48,8 @@
         			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
         				<p:dataExporter type="csv" target=":form2:dataTable" fileName="Pedidos" />
     				</p:commandButton>
-    				<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
-        				<p:dataExporter type="xlsx" target=":form2:dataTable" fileName="Pedidos" />
-    				</p:commandButton>
-    				<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
-        				<p:dataExporter type="json" target=":form2:dataTable" fileName="Pedidos" />
+    				<p:commandButton icon="pi pi-file-excel" value="Exportar a Excel" ajax="false">
+        				<p:dataExporter type="xls" target=":form2:dataTable" fileName="Pedidos" />
     				</p:commandButton>
 				</h:form>
 			<p:dataTable id="dataTable" value="#{beanSupervisor.listaPedidoCab}" var="pc"
