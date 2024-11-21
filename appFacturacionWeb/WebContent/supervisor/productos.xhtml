@@ -66,15 +66,13 @@
 
 		</p:panelGrid>
 	</h:form>
-	<h:form id="form2">
 	<h:form id="formExport">
-        			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
-        				<p:dataExporter type="csv" target=":form2:tabla1" fileName="Productos" />
-    				</p:commandButton>
-    				 <p:commandButton icon="pi pi-file-excel" value="Exportar a Excel" ajax="false">
-        				<p:dataExporter type="xls" target=":form2:tabla1" fileName="Productos" />
-    				</p:commandButton>
-				</h:form>
+		<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
+		<p:dataExporter type="csv" target=":form2:tabla1" fileName="Productos" /></p:commandButton>
+		 <p:commandButton icon="pi pi-file-excel" value="Exportar a Excel" ajax="false">
+		<p:dataExporter type="xls" target=":form2:tabla1" fileName="Productos" /></p:commandButton>
+	</h:form>
+	<h:form id="form2">
 		<p:dataTable border="1" value="#{beanProductos.listaProductos}"
 			var="p" paginator="true" rows="6" id="tabla1">
 			<p:column headerText="CÓDIGO">
