@@ -31,6 +31,8 @@ public class ManagerLogin {
 	 * un error con la consulta a la base de datos.
 	 */
 	public String accederSistema(String codigoUsuario,String clave) throws Exception{
+		//elimina los espacios en blanco del codigoUsuario
+		codigoUsuario = codigoUsuario.trim();
 		Usuario usuario=(Usuario)managerDAO.findById(Usuario.class, codigoUsuario);
 		
 		if(usuario==null)

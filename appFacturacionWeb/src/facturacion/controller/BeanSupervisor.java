@@ -30,8 +30,21 @@ public class BeanSupervisor implements Serializable {
 		
 	}
 	public String actionBuscar(){
+		if (fechaInicio == null || fechaFinal == null) {
+	        JSFUtil.crearMensajeWARN("Debe seleccionar ambas fechas.");
+	        return ""; 
+	    }
+	    if (fechaFinal.before(fechaInicio)) {
+	        JSFUtil.crearMensajeERROR("La fecha final no puede ser menor que la fecha inicial.");
+	        return "";
+	    }
 		//unicamente se invoca esta accion para actualizar
 		//los parametros de fechas.
+		return "";
+	}
+	public String actionBorrarFiltros(){
+		setFechaInicio(null);
+		setFechaFinal(null);
 		return "";
 	}
 	/**
@@ -48,10 +61,18 @@ public class BeanSupervisor implements Serializable {
 		}
 		return "";
 	}
+	public boolean despachado(String des) {
+	    return "Pedido despachado".equalsIgnoreCase(des != null ? des : "");
+	}
+
+	
+	
+	
 	public String actionDespacharPedido(PedidoCab pedidoCab){
 		try {
 			//invocamos a ManagerFacturacion para crear una nueva factura:
 			managerPedidos.despacharPedido(beanLogin.getCodigoUsuario(),pedidoCab.getNumeroPedido());
+			JSFUtil.crearMensajeINFO("Pedido Despachado correctamente");
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSFUtil.crearMensajeERROR(e.getMessage());

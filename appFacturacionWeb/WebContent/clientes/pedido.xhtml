@@ -20,9 +20,20 @@
 			value="#{beanPedidos.nombres} #{beanPedidos.apellidos} - #{beanPedidos.direccion}" />
 	</p:panel>
 	<br />
+	<h:form>
+		<h:panelGrid columns="3">
+			<h:outputLabel value="Buscar por nombre: " />
+			<p:inputText value="#{beanPedidos.filtro}" />
+			<p:commandButton icon="pi pi-search" value="Buscar"
+				action="#{beanPedidos.actionFiltrarProductos}"
+				update=":form1:dataGridId" />
+		</h:panelGrid>
+	</h:form>
+	<br />
 	<h:form id="form1">
-		<p:dataGrid value="#{beanPedidos.listaProductos}" var="p" columns="4"
-			rows="8" paginator="true" rowsPerPageTemplate="4,8,12">
+		<p:dataGrid id="dataGridId" value="#{beanPedidos.listaProductos}"
+			var="p" columns="4" rows="8" paginator="true"
+			rowsPerPageTemplate="4,8,12">
 			<f:facet name="header">
 				<h:outputText value="Seleccione los productos:" />
 			</f:facet>
@@ -31,32 +42,44 @@
 					<h:outputText value="#{p.nombre}" />
 					<h:outputText value="$#{p.precioUnitario}" />
 					<h:outputText value="#{p.descripcion}" />
-					<p:commandButton
-						actionListener="#{beanPedidos.actionInsertarProducto(p)}"
-						update=":form2:carrito" icon="pi pi-shopping-cart" />
+					<p:commandButton actionListener="#{beanPedidos.actionInsertarProducto(p)}" 
+					update=":form2:carrito :form2:continuarButton :msg" 
+					icon="pi pi-shopping-cart" />
 				</h:panelGrid>
 			</p:panel>
 		</p:dataGrid>
 	</h:form>
+	<p:messages id="msg"></p:messages>
 	<br />
 	<h:form id="form2">
 		<h:panelGrid columns="2" style="width:50%">
 			<p:panel header="Carrito de compras:" id="carrito">
-				<p:dataTable value="#{beanPedidos.pedidoCabTmp.pedidoDets}"
-					var="det">
-					<p:column>
-						<h:outputText value="#{det.producto.nombre}" />
-					</p:column>
-					<p:column style="width:60px;text-align:right">
-						<h:outputText value="#{det.producto.precioUnitario}" />
-					</p:column>
+				<p:dataTable value="#{beanPedidos.pedidoCabTmp.pedidoDets}" var="det">
+				    <p:column headerText="Producto">
+				        <h:outputText value="#{det.producto.nombre}" />
+				    </p:column>
+				    <p:column headerText="Precio Unitario" style="width:60px;text-align:right">
+				        <h:outputText value="#{det.producto.precioUnitario}" />
+				    </p:column>
+				    <p:column headerText="Cantidad" style="width:60px;text-align:right">
+				        <h:outputText value="#{det.cantidad}" />
+				    </p:column>
+				    <p:column headerText="Total" style="width:60px;text-align:right">
+				        <h:outputText value="#{det.cantidad * det.producto.precioUnitario}" />
+				    </p:column>
+				    <p:column headerText="Acción">
+				        <p:commandButton
+				            actionListener="#{beanPedidos.actionEliminarProducto(det)}"
+				            update=":form2:carrito" icon="pi pi-trash" />
+				    </p:column>
 				</p:dataTable>
 			</p:panel>
 			<h:panelGrid style="text-align:center">
 				<h:outputText
 					value="Una vez que seleccione los productos puede confirmar su pedido: " />
-				<p:commandButton icon="ui-icon-circle-arrow-e" value="Continuar"
-					action="confirmacion"></p:commandButton>
+			<p:commandButton id="continuarButton" icon="ui-icon-circle-arrow-e" value="Continuar" 
+			action="confirmacion" disabled="#{beanPedidos.pedidoCabTmp == null or empty beanPedidos.pedidoCabTmp.pedidoDets}" 
+			update="carrito continuarButton" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</h:form>
