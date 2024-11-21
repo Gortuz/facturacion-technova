@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Listado de Facturas</title>
+    <style>
+        /* General styles for printing */
+        @media print {
+            body {
+                font-size: 12pt;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+
+            th, td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+
+            caption {
+                font-weight: bold;
+                font-size: 14pt;
+                margin-bottom: 10px;
+            }
+
+            /* Remove unnecessary elements like buttons */
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Styles for screen */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        caption {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin: 20px;
+        }
+    </style>
+</h:head>
+<body>
+    <div class="container">
+        <!-- Title -->
+        <h1 style="text-align: center; margin-bottom: 20px;">Listado de Facturas</h1>
+
+        <!-- Main Form -->
+        <h:form id="form1">
+            <p:dataTable value="#{beanFactura.listaFacturasCab}" var="f"
+                         id="tablaFacturas" style="margin-bottom: 20px;">
+                <f:facet name="header">
+                    <caption>Tabla de Facturas</caption>
+                </f:facet>
+                <p:column id="col1" style="width: 10px">
+                    <f:facet name="header">
+                        <h:outputText value="N#" />
+                    </f:facet>
+                    <h:outputText value="#{f.numeroFactura}" />
+                </p:column>
+                <p:column id="col2">
+                    <f:facet name="header">
+                        <h:outputText value="Cédula Cliente" />
+                    </f:facet>
+                    <h:outputText value="#{f.cliente.cedulaCliente}" />
+                </p:column>
+                <p:column id="col3">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre Cliente" />
+                    </f:facet>
+                    <h:outputText value="#{f.cliente.apellidos} #{f.cliente.nombres}" />
+                </p:column>
+                <p:column id="col4">
+                    <f:facet name="header">
+                        <h:outputText value="Fecha" />
+                    </f:facet>
+                    <h:outputText value="#{f.fechaEmision}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                <p:column id="col5">
+                    <f:facet name="header">
+                        <h:outputText value="Subtotal" />
+                    </f:facet>
+                    <h:outputText value="#{f.subtotal}">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                    </h:outputText>
+                </p:column>
+                <p:column id="col6">
+                    <f:facet name="header">
+                        <h:outputText value="IVA" />
+                    </f:facet>
+                    <h:outputText value="#{f.valorIva}">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                    </h:outputText>
+                </p:column>
+                <p:column id="col7">
+                    <f:facet name="header">
+                        <h:outputText value="Total" />
+                    </f:facet>
+                    <h:outputText value="#{f.total}">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </div>
+</body>
+</html>
