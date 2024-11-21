@@ -9,10 +9,18 @@
     <title>Facturas</title>
 </h:head>
 <body style="font-size: 80%">
-    <p:commandButton value="Print All" type="button" icon="pi pi-print"
-                     style="display:block;margin-bottom: 20px">
-        <p:printer target=":form1" />
-    </p:commandButton>
+    
+    <p:commandButton value="Imprimir" icon="pi pi-print" type="button"
+                 	onclick="imprimirFactura();"/>
+	<h:form id="formImprimir">
+		<iframe id="iframeImprimir" src="facturas_imprimir.xhtml" style="display:none;"></iframe>
+	</h:form>
+	<script type="text/javascript">
+		function imprimirFactura() {
+			var iframe = document.getElementById('iframeImprimir');
+			iframe.contentWindow.print(); // Llama a la función de impresión del iframe
+		}
+	</script>
 
     <!-- Formulario de exportación separado -->
     <h:form id="formExport">
