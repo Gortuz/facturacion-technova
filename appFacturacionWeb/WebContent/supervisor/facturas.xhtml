@@ -11,13 +11,16 @@
 <body style="font-size: 80%">
 	<p:commandButton value="Print All" type="button" icon="pi pi-print"
 		style="display:block;margin-bottom: 20px">
-		<p:printer target=":form1" />
+		<p:printer target=":form1:tablaFacturas" />
 	</p:commandButton>
 	<h:form id="form1" >
 		<h:commandLink action="index" value="Ir al inicio..." />
 		<h:form id="formExport">
         			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
         				<p:dataExporter type="csv" target=":form1:tablaFacturas" fileName="Facturas" />
+    				</p:commandButton>
+    				<p:commandButton icon="pi pi-file-excel" value="Exportar a Excel" ajax="false">
+        				<p:dataExporter type="xls" target=":form1:tablaFacturas" fileName="Facturas" />
     				</p:commandButton>
 				</h:form>
 		<p:dataTable value="#{beanFactura.listaFacturasCab}" var="f" paginator="true" rows="15" 
