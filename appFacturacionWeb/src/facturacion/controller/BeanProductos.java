@@ -27,6 +27,7 @@ public class BeanProductos implements Serializable {
 	private BigDecimal precioUnitario;
 	private String tieneImpuesto;
 	private Producto productoSelecionado;
+	private String filtro;
 	
 	public BeanProductos(){
 		
@@ -109,8 +110,19 @@ public class BeanProductos implements Serializable {
 	}
 	
 	public List<Producto> getListaProductos(){
-		listaProductos=managerFacturacion.findAllProductos();
+		if (filtro == null || filtro.isEmpty()) {
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
 		return listaProductos;
+	}
+	public String filtrarListaProductos(){
+		return "";
+	}
+	public String limpiarFiltro() {
+		setFiltro(null);
+		return "";
 	}
 	public Integer getCodigoProducto() {
 		return codigoProducto;
@@ -155,5 +167,11 @@ public class BeanProductos implements Serializable {
 
 	public void setProductoSelecionado(Producto productoSelecionado) {
 		this.productoSelecionado = productoSelecionado;
+	}
+	public String getFiltro() {
+		return filtro;
+	}
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
 	}	
 }

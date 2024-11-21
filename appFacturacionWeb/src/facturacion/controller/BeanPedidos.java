@@ -157,12 +157,20 @@ public class BeanPedidos implements Serializable {
 		return "pedido";
 	}
 	
-	public void actionFiltrarProductos(){
-	    if (filtro == null || filtro.isEmpty()) {
+	public List<Producto> getListaProductos(){
+		if (filtro == null || filtro.isEmpty()) {
 	        listaProductos = managerFacturacion.findAllProductos();
 	    } else {
 	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
 	    }
+		return listaProductos;
+	}
+	public String filtrarListaProductos(){
+		return "";
+	}
+	public String limpiarFiltro() {
+		setFiltro(null);
+		return "";
 	}
 	
 	public void validarNombresApellidos(FacesContext context, UIComponent component, Object value) {
@@ -218,10 +226,6 @@ public class BeanPedidos implements Serializable {
 
 	public void setClave(String clave) {
 		this.clave = clave;
-	}
-
-	public List<Producto> getListaProductos() {
-		return listaProductos;
 	}
 
 	public void setListaProductos(List<Producto> listaProductos) {
