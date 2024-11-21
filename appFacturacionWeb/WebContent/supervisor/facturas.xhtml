@@ -1,108 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Facturas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Facturas</title>
 </h:head>
 <body style="font-size: 80%">
-	<p:commandButton value="Print All" type="button" icon="pi pi-print"
-		style="display:block;margin-bottom: 20px">
-		<p:printer target=":form1:tablaFacturas" />
-	</p:commandButton>
-	<h:form id="form1" >
-		<h:commandLink action="index" value="Ir al inicio..." />
-		<h:form id="formExport">
-        			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
-        				<p:dataExporter type="csv" target=":form1:tablaFacturas" fileName="Facturas" />
-    				</p:commandButton>
-    				<p:commandButton icon="pi pi-file-excel" value="Exportar a Excel" ajax="false">
-        				<p:dataExporter type="xls" target=":form1:tablaFacturas" fileName="Facturas" />
-    				</p:commandButton>
-				</h:form>
-		<p:dataTable value="#{beanFactura.listaFacturasCab}" var="f" paginator="true" rows="15" 
-			id="tablaFacturas">
-			<f:facet name="header">
-				<h:outputText value="Listado de facturas" />
-			</f:facet>
-			<p:column id="col1">
-				<f:facet name="header">
-					<h:outputText value="NUMERO"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.numeroFactura}"></h:outputText>
-			</p:column>
-			<p:column id="col2">
-				<f:facet name="header">
-					<h:outputText value="CLIENTE"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.cliente.cedulaCliente}"></h:outputText>
-			</p:column>
-			<p:column id="col3">
-				<f:facet name="header">
-					<h:outputText value="CLIENTE"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.cliente.apellidos} #{f.cliente.nombres}"></h:outputText>
-			</p:column>
-			<p:column id="col4">
-				<f:facet name="header">
-					<h:outputText value="FECHA"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.fechaEmision}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputText>
-			</p:column>
-			<p:column id="col5">
-				<f:facet name="header">
-					<h:outputText value="SUBTOTAL"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.subtotal}">
-					<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
-				</h:outputText>
-			</p:column>
-			<p:column id="col6">
-				<f:facet name="header">
-					<h:outputText value="IVA"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.valorIva}">
-					<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
-				</h:outputText>
-			</p:column>
-			<p:column id="col7">
-				<f:facet name="header">
-					<h:outputText value="TOTAL"></h:outputText>
-				</f:facet>
-				<h:outputText value="#{f.total}">
-					<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
-				</h:outputText>
-			</p:column>
-			<p:column id="col8">
-				<f:facet name="header">
-					<h:outputText value="DETALLES"></h:outputText>
-				</f:facet>
-				<p:commandButton value="Detalle" 
-					oncomplete="PF('detalleDialog').show()" 
-					update=":form1"/>
-				<!-- Diálogo emergente -->
-				<p:dialog id="detalleDialog" widgetVar="detalleDialog"
-					header="Detalles de la Factura" modal="true" draggable="false"
-					resizable="false" closable="true">
-					<h:form id="detalleDialogForm">
-						<p:dataTable value="#{f.facturaDets}" var="fd" style="width:100%">
-							<p:column headerText="Producto">
-								<h:outputText value="#{fd.producto.nombre}" />
-							</p:column>
-						</p:dataTable>
-						<p:commandButton value="Cerrar"
-							onclick="PF('detalleDialog').hide()" type="button" />
-					</h:form>
-				</p:dialog>
-			</p:column>
-		</p:dataTable>
+    <p:commandButton value="Print All" type="button" icon="pi pi-print"
+                     style="display:block;margin-bottom: 20px">
+        <p:printer target=":form1" />
+    </p:commandButton>
 
+    <!-- Formulario de exportación separado -->
+    <h:form id="formExport">
+        <p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
+            <p:dataExporter type="csv" target=":form1:tablaFacturas" fileName="Facturas" />
+        </p:commandButton>
+    </h:form>
 
-	</h:form>
+    <!-- Formulario principal -->
+    <h:form id="form1">
+        <h:commandLink action="index" value="Ir al inicio..." />
+        <p:dataTable value="#{beanFactura.listaFacturasCab}" var="f" paginator="true" rows="15"
+                     id="tablaFacturas">
+            <f:facet name="header">
+                <h:outputText value="Listado de facturas" />
+            </f:facet>
+            <p:column id="col1">
+                <f:facet name="header">
+                    <h:outputText value="NUMERO"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.numeroFactura}"></h:outputText>
+            </p:column>
+            <p:column id="col2">
+                <f:facet name="header">
+                    <h:outputText value="CLIENTE"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.cliente.cedulaCliente}"></h:outputText>
+            </p:column>
+            <p:column id="col3">
+                <f:facet name="header">
+                    <h:outputText value="CLIENTE"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.cliente.apellidos} #{f.cliente.nombres}"></h:outputText>
+            </p:column>
+            <p:column id="col4">
+                <f:facet name="header">
+                    <h:outputText value="FECHA"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.fechaEmision}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+            <p:column id="col5">
+                <f:facet name="header">
+                    <h:outputText value="SUBTOTAL"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.subtotal}">
+                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                </h:outputText>
+            </p:column>
+            <p:column id="col6">
+                <f:facet name="header">
+                    <h:outputText value="IVA"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.valorIva}">
+                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                </h:outputText>
+            </p:column>
+            <p:column id="col7">
+                <f:facet name="header">
+                    <h:outputText value="TOTAL"></h:outputText>
+                </f:facet>
+                <h:outputText value="#{f.total}">
+                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+                </h:outputText>
+            </p:column>
+            <p:column id="col8">
+                <f:facet name="header">
+                    <h:outputText value="DETALLES"></h:outputText>
+                </f:facet>
+                <p:commandButton value="Detalle"
+                                 oncomplete="PF('detalleDialog').show()"
+                                 update=":form1" />
+                <!-- Diálogo emergente -->
+                <p:dialog id="detalleDialog" widgetVar="detalleDialog"
+                          header="Detalles de la Factura" modal="true" draggable="false"
+                          resizable="false" closable="true">
+                    <h:form id="detalleDialogForm">
+                        <p:dataTable value="#{f.facturaDets}" var="fd" style="width:100%">
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{fd.producto.nombre}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Cerrar"
+                                         onclick="PF('detalleDialog').hide()" type="button" />
+                    </h:form>
+                </p:dialog>
+            </p:column>
+        </p:dataTable>
+    </h:form>
 </body>
 </html>
