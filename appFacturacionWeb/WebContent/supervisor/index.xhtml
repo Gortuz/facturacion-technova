@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	>
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Búsqueda de solicitudes</title>
@@ -46,6 +47,12 @@
 				<h:form id="formExport">
         			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
         				<p:dataExporter type="csv" target=":form2:dataTable" fileName="Pedidos" />
+    				</p:commandButton>
+    				<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
+        				<p:dataExporter type="xlsx" target=":form2:dataTable" fileName="Pedidos" />
+    				</p:commandButton>
+    				<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
+        				<p:dataExporter type="json" target=":form2:dataTable" fileName="Pedidos" />
     				</p:commandButton>
 				</h:form>
 			<p:dataTable id="dataTable" value="#{beanSupervisor.listaPedidoCab}" var="pc"
