@@ -85,6 +85,14 @@
 					<f:facet name="header">
 						<h:outputText value="Detalle de productos:" />
 					</f:facet>
+					<p:column style="width:40px">
+						<f:facet name="header">
+					ACCIÓN
+				</f:facet>
+				<p:commandButton actionListener="#{beanFactura.actionEliminarDetalle(d)}"
+					update=":form3" icon="pi pi-trash"
+				 />
+				 </p:column>
 					<p:column style="width:60px">
 						<f:facet name="header">
 					CODIGO
