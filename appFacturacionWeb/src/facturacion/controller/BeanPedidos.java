@@ -13,11 +13,13 @@ import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.PedidoCab;
+import facturacion.model.dao.entities.PedidoDet;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import facturacion.model.manager.ManagerPedidos;
+import facturacion.model.dao.entities.PedidoDet;
 import java.io.Serializable;
-
+import java.math.BigDecimal;
 @Named
 @SessionScoped
 public class BeanPedidos implements Serializable {
@@ -36,7 +38,8 @@ public class BeanPedidos implements Serializable {
 	private ManagerPedidos managerPedidos;
 	
 	private PedidoCab pedidoCabTmp;
-	
+
+	private String filtro;
 
 	public BeanPedidos() {
 
@@ -44,7 +47,7 @@ public class BeanPedidos implements Serializable {
 	@PostConstruct
 	public void iniciar(){
 		listaProductos=managerFacturacion.findAllProductos();
-	
+		filtro = "";
 	}
 	
 
@@ -103,27 +106,54 @@ public class BeanPedidos implements Serializable {
 		return "";
 
 	}
+	public void actionEliminarProducto(PedidoDet p){
+		try {
+			if(pedidoCabTmp!=null)
+			//eliminamos un producto del carrito de compras:
+			managerPedidos.eliminarDetallePedidoTmp(pedidoCabTmp,p);
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSFUtil.crearMensajeERROR(e.getMessage());
+		}
+	}
 	
-	public void actionInsertarProducto(Producto p){
-		try {
-			if(pedidoCabTmp==null)
-				pedidoCabTmp=managerPedidos.crearPedidoTmp();
-			//agregamos un nuevo producto al carrito de compras:
-			managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
-		} catch (Exception e) {
-			e.printStackTrace();
-			JSFUtil.crearMensajeERROR(e.getMessage());
-		}
+	public void actionInsertarProducto(Producto p) {
+	    try {
+	        if (pedidoCabTmp == null) {
+	            pedidoCabTmp = managerPedidos.crearPedidoTmp();
+	        }
+	        boolean encontrado = false;
+	        for (PedidoDet detalle : pedidoCabTmp.getPedidoDets()) {
+	            if (detalle.getProducto().getCodigoProducto().equals(p.getCodigoProducto())) {
+	                detalle.setCantidad(detalle.getCantidad() + 1);
+	                encontrado = true;
+	                break;
+	            }
+	        }
+	        if (!encontrado) {
+	            managerPedidos.agregarDetallePedidoTmp(pedidoCabTmp, p.getCodigoProducto(), 1);
+	        }
+	        managerPedidos.calcularPedidoTmp(pedidoCabTmp);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JSFUtil.crearMensajeERROR(e.getMessage());
+	    }
 	}
-	public String actionGuardarPedido(){
-		try {
-			managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
-		} catch (Exception e) {
-			e.printStackTrace();
-			JSFUtil.crearMensajeERROR(e.getMessage());
-		}
-		return "pedido_imprimir";
+	public String actionGuardarPedido() {
+	    try {
+	        if (pedidoCabTmp == null || pedidoCabTmp.getPedidoDets().isEmpty()) {
+	            JSFUtil.crearMensajeERROR("El carrito está vacío. Por favor, agregue productos antes de continuar.");
+	            return "";
+	        }
+	        managerPedidos.guardarPedidoTemporal(pedidoCabTmp);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JSFUtil.crearMensajeERROR(e.getMessage());
+	    }
+	    return "pedido_imprimir";
 	}
+
 	public String actionCerrarPedido(){
 		pedidoCabTmp=null;
 		//creamos el pedido temporal y asignamos el cliente automaticamente:
@@ -135,6 +165,14 @@ public class BeanPedidos implements Serializable {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}
 		return "pedido";
+	}
+	
+	public void actionFiltrarProductos(){
+	    if (filtro == null || filtro.isEmpty()) {
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
 	}
 	
 	public void validarNombresApellidos(FacesContext context, UIComponent component, Object value) {
@@ -207,5 +245,12 @@ public class BeanPedidos implements Serializable {
 	public void setPedidoCabTmp(PedidoCab pedidoCabTmp) {
 		this.pedidoCabTmp = pedidoCabTmp;
 	}
+	public String getFiltro() {
+		return filtro;
+	}
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}
 
+	
 }
