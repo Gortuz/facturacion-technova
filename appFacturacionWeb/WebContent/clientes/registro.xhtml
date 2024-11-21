@@ -12,7 +12,7 @@
 	<h:form>
 		<p:panel header="Registro de clientes" id="panel1">
 			<h:panelGrid columns="3">
-				<h:outputText value="Ingrese su cedula" />
+				<h:outputText value="Ingrese su cédula" />
 				<p:inputText id="cedula" value="#{beanPedidos.cedula}" size="10"
 					maxlength="10" required="true"
 					requiredMessage="Debe ingresar la cedula."
@@ -23,7 +23,7 @@
 				
 				<h:outputText value="Nombres" />
 				<p:inputText id="nombres" value="#{beanPedidos.nombres}" 
-				    required="true" requiredMessage="Debe colocar los nombres"
+				    required="true" requiredMessage="Debe colocar los nombres."
 				    validator="#{beanPedidos.validarNombresApellidos}">
 				    <f:attribute name="campo" value="Nombres" />
 				    <p:ajax event="blur" process="@this" update="nombresMessage" />
@@ -32,14 +32,14 @@
 				
 				<h:outputText value="Apellidos" />
 				<p:inputText id="apellidos" value="#{beanPedidos.apellidos}" 
-				    required="true" requiredMessage="Debe colocar los apellidos"
+				    required="true" requiredMessage="Debe colocar los apellidos."
 				    validator="#{beanPedidos.validarNombresApellidos}">
 				    <f:attribute name="campo" value="Apellidos" />
 				    <p:ajax event="blur" process="@this" update="apellidosMessage" />
 				</p:inputText>
 				<p:message id="apellidosMessage" for="apellidos" />
 				
-				<h:outputText value="Direccion" />
+				<h:outputText value="Dirección" />
 				<p:inputText value="#{beanPedidos.direccion}" />
 				<h:outputText value="" />
 				<h:outputText value="Clave" />
