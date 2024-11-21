@@ -192,7 +192,7 @@ public class ManagerPedidos {
 	 * 
 	 * @param pedidoCabTmp Pedido temporal creado en memoria.
 	 */
-	public void calcularPedidoTmp(PedidoCab pedidoCabTmp) {
+	private void calcularPedidoTmp(PedidoCab pedidoCabTmp) {
 		double sumaSubtotales;
 
 		if (pedidoCabTmp == null)
@@ -237,6 +237,15 @@ public class ManagerPedidos {
 		// verificamos el Stock.
 		if (prod.getExistencia() <= 0) throw new Exception(
 				"Sin Stock.");
+		
+		// aumentamos la cantidad en caso de que ya exista el producto en el carrito
+		for (PedidoDet detalle : pedidoCabTmp.getPedidoDets()) {
+            if (detalle.getProducto().getCodigoProducto().equals(codigoProducto)) {
+                detalle.setCantidad(detalle.getCantidad() + 1);
+        		calcularPedidoTmp(pedidoCabTmp);
+                return;
+            }
+        }
 		
 		// creamos un nuevo detalle y llenamos sus propiedades:
 		pedidoDet = new PedidoDet();
