@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Busqueda de solicitudes</title>
+	<title>Búsqueda de solicitudes</title>
 </h:head>
 <body style="font-size: 70%">
 	<h:form>
@@ -22,29 +22,36 @@
 	</h:form>
 	<br />
 	<h:form id="form1">
-		<p:panelGrid columns="3">
+		<p:panelGrid columns="4">
 			<f:facet name="header">
-				<h:outputText value="BUSQUEDA" />
+				<h:outputText value="BÚSQUEDA" />
 			</f:facet>
 			<h:outputText value="Fecha inicio" />
 			<h:outputText value="Fecha fin" />
 			<h:outputText value="" />
+			<h:outputText value="" />
 			<p:calendar value="#{beanSupervisor.fechaInicio}" />
 			<p:calendar value="#{beanSupervisor.fechaFinal}" />
-			<p:commandButton icon="pi pi-search" value="Buscar"
-				update=":form2:panel1" action="#{beanSupervisor.actionBuscar()}" />
+			<p:commandButton icon="pi pi-search" value="Buscar" update=":mensajes, :form2:panel1" action="#{beanSupervisor.actionBuscar()}" />
+			<p:commandButton icon="pi pi-eraser" value="Borrar Filtros"
+				update=":form2:panel1 :form1" action="#{beanSupervisor.actionBorrarFiltros()}" />	
+
 		</p:panelGrid>
 	</h:form>
 	<br />
-	<p:messages id="mensajes"></p:messages>
+	<p:messages id="mensajes" autoUpdate="true" />
 	<h:form id="form2">
 		<p:panel header="Resultado de la búsqueda:" id="panel1">
-			<p:dataTable value="#{beanSupervisor.listaPedidoCab}" var="pc" paginator="true">
-				<p:column headerText="NUM">
+			<p:dataTable value="#{beanSupervisor.listaPedidoCab}" var="pc"
+				paginator="true">
+				<p:column headerText="NUM PEDIDO">
 					<h:outputText value="#{pc.numeroPedido}" />
 				</p:column>
 				<p:column headerText="FECHA DE PEDIDO">
 					<h:outputText value="#{pc.fechaPedido}" />
+				</p:column>
+				<p:column headerText="CÉDULA CLIENTE">
+					<h:outputText value="#{pc.cliente.cedulaCliente}" />
 				</p:column>
 				<p:column headerText="SUBTOTAL">
 					<h:outputText value="#{pc.subtotal}">
@@ -60,13 +67,23 @@
 						oncomplete="PF('dialogo1').show()" />
 				</p:column>
 				<p:column headerText="DESPACHAR">
-					<p:commandButton update=":form2:panel1,:mensajes"
-						action="#{beanSupervisor.actionDespacharPedido(pc)}"
-						icon="pi pi-check" />
+					<p:commandButton update=":form2:menuConfirmar"
+						action="#{beanSupervisor.actionCargarPedido(pc)}"
+						icon="pi pi-check" oncomplete="PF('menu').show()"
+						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado)}"  />
 				</p:column>
 			</p:dataTable>
 		</p:panel>
-		<p:dialog header="INFORMACION" widgetVar="dialogo1" modal="true"
+		<p:confirmDialog 
+				message="¿Seguro deseas despachar el pedido #{beanSupervisor.pedidoCabTmp.numeroPedido}?" 
+				header="Despachar pedido" 
+				severity="alert" 
+				widgetVar="menu"
+				id="menuConfirmar">
+        			<p:commandButton value="Confirmar" action="#{beanSupervisor.actionDespacharPedido(beanSupervisor.pedidoCabTmp)}" update=":form2:panel1,:mensajes" oncomplete="PF('menu').hide()"/>
+        			<p:commandButton value="Cancelar" onclick="PF('menu').hide();" type="button" />
+    	</p:confirmDialog>
+		<p:dialog header="INFORMACIÓN" widgetVar="dialogo1" modal="true"
 			id="dlg1">
 			<p:panel id="detallePedido" header="Información del pedido"
 				style="width:500px">
@@ -75,9 +92,21 @@
 					<h:outputText value="#{beanSupervisor.pedidoCabTmp.numeroPedido}" />
 					<h:outputText value="Fecha pedido:" />
 					<h:outputText value="#{beanSupervisor.pedidoCabTmp.fechaPedido}" />
-					<h:outputText value="Cliente:" />
+					<h:outputText value="Cedula cliente:" />
 					<h:outputText
 						value="#{beanSupervisor.pedidoCabTmp.cliente.cedulaCliente}" />
+					<h:outputText value="Nombres:" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.cliente.nombres}" />
+					<h:outputText value="Apellidos:" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.cliente.apellidos}" />
+					<h:outputText value="Dirección:" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.cliente.direccion}" />
+					<h:outputText value="Estado del pedido:" />
+					<h:outputText
+						value="#{beanSupervisor.pedidoCabTmp.estadoPedido.descripcionEstado}" />
 					<h:outputText value="Subtotal:" />
 					<h:outputText value="#{beanSupervisor.pedidoCabTmp.subtotal}">
 						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />

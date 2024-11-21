@@ -57,8 +57,14 @@ public class BeanLogin implements Serializable {
 	 * @return
 	 */
 	public String salirSistema(){
+		String redirectPage = "/clientes/index.xhtml?faces-redirect=true";
+		
+		if (tipoUsuario != null) {
+		    redirectPage = "/login.xhtml?faces-redirect=true";
+		}
+		
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-		return "/index.xhtml?faces-redirect=true";
+		return redirectPage;
 	}
 
 	public String getCodigoUsuario() {

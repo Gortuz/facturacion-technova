@@ -156,7 +156,7 @@ public class ManagerPedidos {
 	 * 
 	 * @param pedidoCabTmp Pedido temporal creado en memoria.
 	 */
-	private void calcularPedidoTmp(PedidoCab pedidoCabTmp) {
+	public void calcularPedidoTmp(PedidoCab pedidoCabTmp) {
 		double sumaSubtotales;
 
 		if (pedidoCabTmp == null)
@@ -197,6 +197,11 @@ public class ManagerPedidos {
 
 		// buscamos el producto:
 		prod = managerFacturacion.findProductoById(codigoProducto);
+		
+		// verificamos el Stock.
+		if (prod.getExistencia() <= 0) throw new Exception(
+				"Sin Stock.");
+		
 		// creamos un nuevo detalle y llenamos sus propiedades:
 		pedidoDet = new PedidoDet();
 		pedidoDet.setCantidad(cantidad);
@@ -208,6 +213,14 @@ public class ManagerPedidos {
 		pedidoCabTmp.getPedidoDets().add(pedidoDet);
 
 		// verificamos los campos calculados:
+		calcularPedidoTmp(pedidoCabTmp);
+	}
+
+	public void eliminarDetallePedidoTmp(PedidoCab pedidoCabTmp,
+			PedidoDet Producto) throws Exception {
+		// buscamos el producto:
+		pedidoCabTmp.removePedidoDet(Producto);
+		// recalculmos el subtotal de pedido:
 		calcularPedidoTmp(pedidoCabTmp);
 	}
 

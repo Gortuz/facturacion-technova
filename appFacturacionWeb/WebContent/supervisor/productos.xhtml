@@ -20,7 +20,7 @@
 					requiredMessage="Debe ingresar un código." />
 				<h:outputText value="NOMBRE:" />
 				<p:inputText value="#{beanProductos.nombre}"></p:inputText>
-				<h:outputText value="DESCRIPCION:" />
+				<h:outputText value="DESCRIPCIÓN:" />
 				<p:inputText value="#{beanProductos.descripcion}"></p:inputText>
 				<h:outputText value="PRECIO:" />
 				<p:spinner value="#{beanProductos.precioUnitario}" stepFactor="0.01"
@@ -41,31 +41,59 @@
 				update=":form2,panelGrid1"></p:commandButton>
 		</h:form>
 	</p:panel>
+	<h:form id="form3">
+		<p:panelGrid columns="4">
+			<f:facet name="header">
+				<h:outputText value="BÚSQUEDA" />
+			</f:facet>
+			<h:outputText value="" />
+			<h:outputText value="Nombre" />
+			<h:outputText value="" />
+			<h:outputText value="" />
+			
+			<h:outputText value="" />
+			<p:inputText id="filtro" value="#{beanProductos.filtro}" />
+			<p:commandButton icon="pi pi-search" value="Buscar" update=":form2" action="#{beanProductos.filtrarListaProductos()}" />
+			<p:commandButton icon="pi pi-eraser" value="Borrar Filtros"
+				update=":form2 :form3" action="#{beanProductos.limpiarFiltro()}" />	
+
+		</p:panelGrid>
+	</h:form>
 	<h:form id="form2">
 		<p:messages></p:messages>
 		<p:dataTable border="1" value="#{beanProductos.listaProductos}"
 			var="p" paginator="true" rows="6" id="tabla1">
-			<p:column headerText="CODIGO">
+			<p:column headerText="CÓDIGO">
 				<h:outputText value="#{p.codigoProducto}"></h:outputText>
 			</p:column>
 			<p:column headerText="NOMBRE">
 				<h:outputText value="#{p.nombre}"></h:outputText>
 			</p:column>
-			<p:column headerText="DESCRIPCION">
+			<p:column headerText="DESCRIPCIÓN">
 				<h:outputText value="#{p.descripcion}"></h:outputText>
 			</p:column>
 			<p:column headerText="PRECIO">
 				<h:outputText value="#{p.precioUnitario}"></h:outputText>
 			</p:column>
 			<p:column headerText="ELIMINAR">
-				<p:commandButton icon="pi pi-times-circle"
-					action="#{beanProductos.actionEliminarProducto(p)}" update=":form2"></p:commandButton>
+				<p:commandButton action="#{beanProductos.actionObtenerProductoSeleccionado(p)}"
+						icon="pi pi-times-circle" update=":form2:menuEliminar"
+						oncomplete="PF('menu').show()" />
 			</p:column>
 			<p:column headerText="ACTUALIZAR">
 				<p:commandButton icon="pi pi-check-circle"
 					action="#{beanProductos.actionCargarProducto(p)}" update=":form2"></p:commandButton>
 			</p:column>
 		</p:dataTable>
+			<p:confirmDialog 
+				message="¿Seguro deseas eliminar el producto #{beanProductos.productoSelecionado.codigoProducto}?" 
+				header="Eliminar producto" 
+				severity="alert" 
+				widgetVar="menu"
+				id="menuEliminar">
+        			<p:commandButton value="Confirmar" action="#{beanProductos.actionEliminarProducto()}" update="form2" oncomplete="PF('menu').hide()"/>
+        			<p:commandButton value="Cancelar" onclick="PF('menu').hide();" type="button" />
+    		</p:confirmDialog>
 	</h:form>
 </body>
 </html>

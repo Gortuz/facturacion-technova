@@ -8,6 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import facturacion.model.manager.ManagerFacturacion;
+
 import facturacion.model.dao.entities.Producto;
 import java.io.Serializable;
 
@@ -25,7 +26,8 @@ public class BeanProductos implements Serializable {
 	private String nombre;
 	private BigDecimal precioUnitario;
 	private String tieneImpuesto;
-	
+	private Producto productoSelecionado;
+	private String filtro;
 	
 	public BeanProductos(){
 		
@@ -62,6 +64,9 @@ public class BeanProductos implements Serializable {
 		}
 		return "";
 	}
+	public String actionEliminarProducto(){
+		return actionEliminarProducto(productoSelecionado);
+	}
 	public String actionCargarProducto(Producto producto){
 		codigoProducto=producto.getCodigoProducto();
 		descripcion=producto.getDescripcion();
@@ -94,9 +99,30 @@ public class BeanProductos implements Serializable {
 		return "productos";
 	}
 	
+	public String actionObtenerProductoSeleccionado(Producto producto){
+		try {
+			//capturamos el valor enviado desde el DataTable:
+			productoSelecionado = producto;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
 	public List<Producto> getListaProductos(){
-		listaProductos=managerFacturacion.findAllProductos();
+		if (filtro == null || filtro.isEmpty()) {
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
 		return listaProductos;
+	}
+	public String filtrarListaProductos(){
+		return "";
+	}
+	public String limpiarFiltro() {
+		setFiltro(null);
+		return "";
 	}
 	public Integer getCodigoProducto() {
 		return codigoProducto;
@@ -134,6 +160,18 @@ public class BeanProductos implements Serializable {
 	public void setTieneImpuesto(String tieneImpuesto) {
 		this.tieneImpuesto = tieneImpuesto;
 	}
-	
-	
+
+	public Producto getProductoSelecionado() {
+		return productoSelecionado;
+	}
+
+	public void setProductoSelecionado(Producto productoSelecionado) {
+		this.productoSelecionado = productoSelecionado;
+	}
+	public String getFiltro() {
+		return filtro;
+	}
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}	
 }
