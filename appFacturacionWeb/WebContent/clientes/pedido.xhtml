@@ -54,22 +54,24 @@
 	<h:form id="form2">
 		<h:panelGrid columns="2" style="width:50%">
 			<p:panel header="Carrito de compras:" id="carrito">
-				<p:dataTable value="#{beanPedidos.pedidoCabTmp.pedidoDets}"
-					var="det">
-					<p:column>
-						<h:outputText value="#{det.producto.nombre}" />
-					</p:column>
-					<p:column style="width:60px;text-align:right">
-						<h:outputText value="#{det.producto.precioUnitario}" />
-					</p:column>
-					<p:column style="width:60px;text-align:right">
-						<h:outputText value="#{det.cantidad}" />
-					</p:column>
-					<p:column>
-						<p:commandButton
-						actionListener="#{beanPedidos.actionEliminarProducto(det)}"
-						update=":form2:carrito" icon="pi pi-trash" />
-					</p:column>
+				<p:dataTable value="#{beanPedidos.pedidoCabTmp.pedidoDets}" var="det">
+				    <p:column headerText="Producto">
+				        <h:outputText value="#{det.producto.nombre}" />
+				    </p:column>
+				    <p:column headerText="Precio Unitario" style="width:60px;text-align:right">
+				        <h:outputText value="#{det.producto.precioUnitario}" />
+				    </p:column>
+				    <p:column headerText="Cantidad" style="width:60px;text-align:right">
+				        <h:outputText value="#{det.cantidad}" />
+				    </p:column>
+				    <p:column headerText="Total" style="width:60px;text-align:right">
+				        <h:outputText value="#{det.cantidad * det.producto.precioUnitario}" />
+				    </p:column>
+				    <p:column headerText="Acción">
+				        <p:commandButton
+				            actionListener="#{beanPedidos.actionEliminarProducto(det)}"
+				            update=":form2:carrito" icon="pi pi-trash" />
+				    </p:column>
 				</p:dataTable>
 			</p:panel>
 			<h:panelGrid style="text-align:center">

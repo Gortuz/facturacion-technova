@@ -156,7 +156,7 @@ public class ManagerPedidos {
 	 * 
 	 * @param pedidoCabTmp Pedido temporal creado en memoria.
 	 */
-	private void calcularPedidoTmp(PedidoCab pedidoCabTmp) {
+	public void calcularPedidoTmp(PedidoCab pedidoCabTmp) {
 		double sumaSubtotales;
 
 		if (pedidoCabTmp == null)
