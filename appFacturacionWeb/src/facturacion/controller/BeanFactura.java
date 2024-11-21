@@ -13,6 +13,7 @@ import javax.inject.Named;
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.FacturaCab;
 import facturacion.model.dao.entities.FacturaDet;
+import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import java.io.Serializable;
@@ -136,6 +137,17 @@ public class BeanFactura implements Serializable {
 		return "";
 	}
 	
+	public String actionCargarFactura(FacturaCab facturaCab){
+		try {
+			//capturamos el valor enviado desde el DataTable:
+			this.facturaCabTmp= facturaCab;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	
 	public String getCedulaCliente() {
 		return cedulaCliente;
 	}
@@ -159,6 +171,8 @@ public class BeanFactura implements Serializable {
 	public void setCantidadProducto(Integer cantidadProducto) {
 		this.cantidadProducto = cantidadProducto;
 	}
+	
+
 
 	/**
 	 * Devuelve un listado de componentes SelectItem a partir
