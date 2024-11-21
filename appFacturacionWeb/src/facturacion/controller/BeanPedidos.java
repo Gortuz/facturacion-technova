@@ -29,12 +29,14 @@ public class BeanPedidos implements Serializable {
 	private String clave;
 	
 	private List<Producto> listaProductos;
+	private List<PedidoCab> historialPedidos;
 	@EJB
 	private ManagerFacturacion managerFacturacion;
 	@EJB
 	private ManagerPedidos managerPedidos;
 	
 	private PedidoCab pedidoCabTmp;
+	
 
 	public BeanPedidos() {
 
@@ -42,10 +44,27 @@ public class BeanPedidos implements Serializable {
 	@PostConstruct
 	public void iniciar(){
 		listaProductos=managerFacturacion.findAllProductos();
+	
 	}
 	
+
+	public List<PedidoCab> getHistorialPedidos() {
+	    return historialPedidos;
+	}
+
+	public void setHistorialPedidos(List<PedidoCab> historialPedidos) {
+	    this.historialPedidos = historialPedidos;
+	}
 	
-	
+	  public void cargarHistorialPedidos() {
+	        try {
+	            // Llamamos al método de ManagerPedidos para obtener los pedidos del cliente con estado "despachado"
+	        	historialPedidos = managerPedidos.obtenerPedidosPorClienteFiltrado(cedula);
+	        } catch (Exception e) {
+	            // Manejo de excepciones
+	            e.printStackTrace();
+	        }
+	    }
 
 	public String actionComprobarCedula() {
 		try {
