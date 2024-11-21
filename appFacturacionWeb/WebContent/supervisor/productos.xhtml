@@ -41,6 +41,24 @@
 				update=":form2,panelGrid1"></p:commandButton>
 		</h:form>
 	</p:panel>
+	<h:form id="form3">
+		<p:panelGrid columns="4">
+			<f:facet name="header">
+				<h:outputText value="BÚSQUEDA" />
+			</f:facet>
+			<h:outputText value="" />
+			<h:outputText value="Nombre" />
+			<h:outputText value="" />
+			<h:outputText value="" />
+			
+			<h:outputText value="" />
+			<p:inputText id="filtro" value="#{beanProductos.filtro}" />
+			<p:commandButton icon="pi pi-search" value="Buscar" update=":form2" action="#{beanProductos.filtrarListaProductos()}" />
+			<p:commandButton icon="pi pi-eraser" value="Borrar Filtros"
+				update=":form2 :form3" action="#{beanProductos.limpiarFiltro()}" />	
+
+		</p:panelGrid>
+	</h:form>
 	<h:form id="form2">
 		<p:messages></p:messages>
 		<p:dataTable border="1" value="#{beanProductos.listaProductos}"
