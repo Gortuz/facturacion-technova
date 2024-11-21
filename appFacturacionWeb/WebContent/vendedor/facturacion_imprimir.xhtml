@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Factura</title>
+    <style type="text/css">
+        body { font-size: 12px; font-family: Arial, sans-serif; margin: 20px; }
+        h2 { text-align: center; margin-bottom: 30px; }
+        .panel { width: 800px; margin-bottom: 20px; }
+        .panelGrid { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .rightAlign { text-align: right; }
+        .largeText { font-size: 16px; }
+    </style>
+</h:head>
+<body style="font-size: 70%">
+    <h:panelGrid id="panel1">
+        <h2>FACTURA</h2>
+        <p:panel header="Datos de la factura:" styleClass="panel">
+            <h:panelGrid columns="2">
+                <h:outputText value="Fecha de emisión:" />
+                <h:outputText value="#{beanFactura.facturaCabTmp.fechaEmision}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+                <h:outputText value="Cliente:" />
+                <h:outputText value="#{beanFactura.facturaCabTmp.cliente.nombres} #{beanFactura.facturaCabTmp.cliente.apellidos}" />
+                <h:outputText value="Cédula:" />
+                <h:outputText value="#{beanFactura.cedulaCliente}" />
+            </h:panelGrid>
+        </p:panel>
+        <p:panel header="Detalle de productos:" styleClass="panel">
+            <p:dataTable value="#{beanFactura.facturaCabTmp.facturaDets}" var="d">
+                <p:column headerText="Código">
+                    <h:outputText value="#{d.producto.codigoProducto}" />
+                </p:column>
+                <p:column headerText="Producto">
+                    <h:outputText value="#{d.producto.nombre}" />
+                </p:column>
+                <p:column headerText="Cantidad" style="width:50px;text-align:right">
+                    <h:outputText value="#{d.cantidad}" />
+                </p:column>
+                <p:column headerText="Precio unitario" style="width:60px;text-align:right">
+                    <h:outputText value="#{d.precioUnitarioVenta}" />
+                </p:column>
+                <p:column headerText="Subtotal" style="width:60px;text-align:right">
+                    <h:outputText value="#{d.precioUnitarioVenta * d.cantidad}" />
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <!-- Fila para Totales -->
+        <h:panelGrid columns="2" style="font-weight: bold; margin-top: 20px; width:800px; text-align: right;">
+            <h:outputText value="Subtotal:" styleClass="largeText" />
+            <h:outputText value="#{beanFactura.facturaCabTmp.subtotal}" styleClass="largeText" style="text-align: right;">
+                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" />
+            </h:outputText>
+
+            <h:outputText value="IVA:" styleClass="largeText" />
+            <h:outputText value="#{beanFactura.facturaCabTmp.valorIva}" styleClass="largeText" style="text-align: right;">
+                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" />
+            </h:outputText>
+
+            <h:outputText value="TOTAL:" styleClass="largeText" />
+            <h:outputText value="#{beanFactura.facturaCabTmp.total}" styleClass="largeText" style="text-align: right;">
+                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" currencySymbol="$" />
+            </h:outputText>
+        </h:panelGrid>
+    </h:panelGrid>
+</body>
+</html>
