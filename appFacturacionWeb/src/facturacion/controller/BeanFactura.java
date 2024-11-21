@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
@@ -11,6 +12,7 @@ import javax.inject.Named;
 
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.FacturaCab;
+import facturacion.model.dao.entities.FacturaDet;
 import facturacion.model.dao.entities.Producto;
 import facturacion.model.manager.ManagerFacturacion;
 import java.io.Serializable;
@@ -34,6 +36,11 @@ public class BeanFactura implements Serializable {
 	
 	public BeanFactura() {
 		
+	}
+	
+	@PostConstruct
+	public void init() {
+		crearNuevaFactura();
 	}
 
 	/**
@@ -89,6 +96,20 @@ public class BeanFactura implements Serializable {
 			managerFacturacion.agregarDetalleFacturaTmp(facturaCabTmp,codigoProducto, cantidadProducto);
 			codigoProducto=0;
 			cantidadProducto=0;
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+		}		
+		return "";
+	}
+	
+	/**
+	 * Action que elimina un item a una factura temporal.
+	 * Hace uso del componente {@link model.manager.ManagerFacturacion ManagerFacturacion} de la capa model.
+	 * @return
+	 */
+	public String actionEliminarDetalle(FacturaDet p){
+		try {
+			managerFacturacion.eliminarDetalleFacturaTmp(facturaCabTmp,p);
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 		}		

@@ -382,6 +382,12 @@ public class ManagerFacturacion {
 		calcularFacturaTmp(facturaCabTmp);
 	}
 	
+	public void eliminarDetalleFacturaTmp(FacturaCab facturaCabTmp,FacturaDet Producto) throws Exception{
+		facturaCabTmp.removeFacturaDet(Producto);		
+		//verificamos los campos calculados:
+		calcularFacturaTmp(facturaCabTmp);
+	}
+	
 	/**
 	 * Guarda en la base de datos una factura.
 	 * @param facturaCabTmp factura temporal creada en memoria.

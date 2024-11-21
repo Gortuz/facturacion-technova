@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Confirmacion</title>
+	<title>Confirmación</title>
 </h:head>
 <body style="font-size: 70%">
 	<p:panel header="Datos del cliente:" style="width:800px">
@@ -34,7 +34,13 @@
 				</p:column>
 				<p:column headerText="PRECIO" style="width:60px;text-align:right">
 					<h:outputText value="#{det.producto.precioUnitario}" />
-					<f:facet name="footer">
+
+				</p:column>
+				<p:column headerText="TOTAL" style="width:60px;text-align:right">
+				    <h:outputText value="#{det.cantidad * det.producto.precioUnitario}">
+				        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+				    </h:outputText>
+				    <f:facet name="footer">
 						<h:outputText value="#{beanPedidos.pedidoCabTmp.subtotal}">
 							<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
 						</h:outputText>

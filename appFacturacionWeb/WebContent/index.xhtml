@@ -6,54 +6,38 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Facturacion</title>
+	<title>Facturación</title>
 </h:head>
-<h:body style="font-size:80%">
-	<h:form>
-		<p:panel header="Sistema de facturacion">
-			<h:panelGrid columns="2">
-				<p:menu>
-					<p:submenu label="Opciones del sistema">
-						<p:menuitem value="Ingreso de usuarios" outcome="login"
-							icon="pi pi-key" />
-					</p:submenu>
-					<p:submenu label="Enlaces">
-						<p:menuitem value="Javadoc" url="/doc/index.html"
-							icon="pi pi-cloud" />
-						<p:menuitem value="Primefaces" url="http://www.primefaces.org"
-							icon="pi pi-home" />
-						<p:menuitem value="Iconos"
-							url="http://www.primefaces.org/showcase/icons.xhtml"
-							icon="pi pi-heart" />
-					</p:submenu>
-				</p:menu>
-				<p:panel>
-					<p:panel style="text-align:center">
-						<p:commandButton value="¡¡ Entrar a comprar !!"
-							action="clientes/index" icon="pi pi-shopping-cart"></p:commandButton>
-					</p:panel>
-					<ul>
-						<li>Demo realizada con JSF 2.2, Primefaces 6, Eclipse Neon.2,
-						    base de datos PostgreSQL 9.2 y EclipseLink 2.5 (JPA).</li>
-						<li>En la carpeta <b>bdd</b> dentro del proyecto se encuentra
-							el respaldo de la base de datos <b>facturacion</b> que fue
-							utilizada en esta demo.
-						</li>
-						<li>En el manejo de productos se utilizan <b>Actions</b> con
-							parametros, la cual es una nueva caracteristica de JSF 2.x y nos
-							permite evitar <b>binding</b> con los DataTables.
-						</li>
-						<li>Las <b>Entities</b> fueron generadas automaticamente y se
-							personalizo la entidad <b>FacturaCab</b>. En esta clase se
-							adiciono el parametro <b>cascade=CascadeType.ALL</b> en la
-							relacion <b>@OneToMany</b> con <b>FacturaDet</b> para poder
-							insertar en cascada (cabecera y detalles de factura) en una sola
-							transaccion.
-						</li>
-					</ul>
-				</p:panel>
-			</h:panelGrid>
-		</p:panel>
-	</h:form>
+<h:body style="font-size:90%; font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0;">
+    <h:form>
+        <p:panel header="Tienda Online" style="max-width: 600px; margin: 50px auto; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <h:panelGrid columns="1" style="width: 100%; text-align: center;">
+                <!-- Botones principales -->
+                <p:panel style="padding: 20px; background-color: #fff; border: none;">
+                    <p:commandButton value="¡EMPIEZA A COMPRAR!" 
+                                     action="clientes/index" 
+                                     icon="pi pi-shopping-cart" 
+                                     style="width: 90%; margin-bottom: 20px; padding: 15px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px;" 
+                                     styleClass="modern-button"/>
+                    <p:commandButton value="Ingreso para Personal" 
+                                     action="login" 
+                                     icon="pi pi-user" 
+                                     style="width: 90%; padding: 15px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px;" 
+                                     styleClass="modern-button"/>
+                </p:panel>
+
+                <!-- Información adicional -->
+                <p:panel style="text-align: left; padding: 20px; background-color: #f7f7f7; border: none;">
+                    <h3 style="margin-bottom: 10px; color: #333;">Información:</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; color: #666;">
+                        <li>Demo realizada con JSF 2.2, Primefaces 6, Eclipse Neon.2, base de datos PostgreSQL 9.2 y EclipseLink 2.5 (JPA).</li>
+                        <li>Respaldo de la base de datos <b>facturación</b> en la carpeta <b>bdd</b> del proyecto.</li>
+                        <li>Productos gestionados mediante <b>Actions</b> con parámetros, evitando <b>binding</b> con DataTables.</li>
+                        <li>Entidades generadas automáticamente; se personalizó la clase <b>FacturaCab</b> para transacciones en cascada.</li>
+                    </ul>
+                </p:panel>
+            </h:panelGrid>
+        </p:panel>
+    </h:form>
 </h:body>
 </html>

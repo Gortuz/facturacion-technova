@@ -111,16 +111,19 @@ public class BeanProductos implements Serializable {
 	
 	public List<Producto> getListaProductos(){
 		if (filtro == null || filtro.isEmpty()) {
-            listaProductos = managerFacturacion.findAllProductos();
-        } else {
-            listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
-        }
+	        listaProductos = managerFacturacion.findAllProductos();
+	    } else {
+	        listaProductos = managerFacturacion.findAllProductosByFilter(filtro);
+	    }
 		return listaProductos;
 	}
-	public String actionFiltrarProductos(){
-        return "";
-    }
-	
+	public String filtrarListaProductos(){
+		return "";
+	}
+	public String limpiarFiltro() {
+		setFiltro(null);
+		return "";
+	}
 	public Integer getCodigoProducto() {
 		return codigoProducto;
 	}

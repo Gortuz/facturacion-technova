@@ -6,22 +6,33 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Comprobacion clientes</title>
+	<title>Comprobación clientes</title>
 </h:head>
 <body style="font-size: 70%">
 	<h:form>
-		<p:panel header="Comprobacion de usuarios" id="panel1">
+		<p:panel header="Comprobación de usuarios" id="panel1">
 			<h:panelGrid columns="3">
-				<h:outputText value="Ingrese su cedula" />
+				<h:outputText value="Ingrese su cédula" />
 				<p:inputText id="cedula" value="#{beanPedidos.cedula}" size="10"
 					maxlength="10" required="true"
 					requiredMessage="Debe ingresar la cedula." />
 				<p:message for="cedula" />
+				<h:outputText value="Ingrese su clave" />
+				<p:password id="clave" value="#{beanPedidos.clave}" size="10"
+					maxlength="10" required="true"
+					requiredMessage="Debe ingresar su clave." />
+				<p:message for="clave" />
+				<p:commandButton value="Regresar" action="/index.xhtml" 
+					icon="pi pi-arrow-left" immediate="true"
+					style="background-color: red; color: white; border-color:red;"/>
 				<p:commandButton action="#{beanPedidos.actionComprobarCedula()}"
-					value="Siguiente..." update="panel1" />
+					value="Ingresar" update="panel1" />
+				<p:commandButton action="registro"
+					value="Soy nuevo" update="panel1" inmediate="true" process="@this"/>
 				<p:messages />
 			</h:panelGrid>
 		</p:panel>
 	</h:form>
+	
 </body>
 </html>
