@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
@@ -34,6 +35,11 @@ public class BeanFactura implements Serializable {
 	
 	public BeanFactura() {
 		
+	}
+	
+	@PostConstruct
+	public void init() {
+		crearNuevaFactura();
 	}
 
 	/**
