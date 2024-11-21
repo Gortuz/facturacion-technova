@@ -19,6 +19,11 @@
 		<h:outputText
 			value="#{beanPedidos.nombres} #{beanPedidos.apellidos} - #{beanPedidos.direccion}" />
 	</p:panel>
+	<p:panel header="">
+		<p:commandButton value="Ver historial compras" icon="pi pi-list"
+			action="#{beanPedidos.cargarHistorialPedidos}"
+			update=":formHistorial" />
+	</p:panel>
 	<br />
 	<h:form id="form3">
 		<p:panelGrid columns="4">
@@ -51,46 +56,83 @@
 					<h:outputText value="#{p.nombre}" />
 					<h:outputText value="$#{p.precioUnitario}" />
 					<h:outputText value="#{p.descripcion}" />
-					<p:commandButton actionListener="#{beanPedidos.actionInsertarProducto(p)}" 
-					update=":form2:carrito :form2:continuarButton :msg" 
-					icon="pi pi-shopping-cart" />
+					<p:commandButton
+						actionListener="#{beanPedidos.actionInsertarProducto(p)}"
+						update=":form2:carrito :form2:continuarButton :msg"
+						icon="pi pi-shopping-cart" />
 				</h:panelGrid>
 			</p:panel>
 		</p:dataGrid>
 	</h:form>
-	<p:messages id="msg"></p:messages>
 	<br />
 	<h:form id="form2">
 		<h:panelGrid columns="2" style="width:50%">
 			<p:panel header="Carrito de compras:" id="carrito">
-				<p:dataTable value="#{beanPedidos.pedidoCabTmp.pedidoDets}" var="det">
-				    <p:column headerText="Producto">
-				        <h:outputText value="#{det.producto.nombre}" />
-				    </p:column>
-				    <p:column headerText="Precio Unitario" style="width:60px;text-align:right">
-				        <h:outputText value="#{det.producto.precioUnitario}" />
-				    </p:column>
-				    <p:column headerText="Cantidad" style="width:60px;text-align:right">
-				        <h:outputText value="#{det.cantidad}" />
-				    </p:column>
-				    <p:column headerText="Total" style="width:60px;text-align:right">
-				        <h:outputText value="#{det.cantidad * det.producto.precioUnitario}" />
-				    </p:column>
-				    <p:column headerText="Acción">
-				        <p:commandButton
-				            actionListener="#{beanPedidos.actionEliminarProducto(det)}"
-				            update=":form2:carrito" icon="pi pi-trash" />
-				    </p:column>
+				<p:dataTable value="#{beanPedidos.pedidoCabTmp.pedidoDets}"
+					var="det">
+					<p:column headerText="Producto">
+						<h:outputText value="#{det.producto.nombre}" />
+					</p:column>
+					<p:column headerText="Precio Unitario"
+						style="width:60px;text-align:right">
+						<h:outputText value="#{det.producto.precioUnitario}" />
+					</p:column>
+					<p:column headerText="Cantidad" style="width:60px;text-align:right">
+						<h:outputText value="#{det.cantidad}" />
+					</p:column>
+					<p:column headerText="Total" style="width:60px;text-align:right">
+						<h:outputText
+							value="#{det.cantidad * det.producto.precioUnitario}" />
+					</p:column>
+					<p:column headerText="Acción">
+						<p:commandButton
+							actionListener="#{beanPedidos.actionEliminarProducto(det)}"
+							update=":form2:carrito" icon="pi pi-trash" />
+					</p:column>
 				</p:dataTable>
 			</p:panel>
 			<h:panelGrid style="text-align:center">
 				<h:outputText
 					value="Una vez que seleccione los productos puede confirmar su pedido: " />
-			<p:commandButton id="continuarButton" icon="ui-icon-circle-arrow-e" value="Continuar" 
-			action="confirmacion" disabled="#{beanPedidos.pedidoCabTmp == null or empty beanPedidos.pedidoCabTmp.pedidoDets}" 
-			update="carrito continuarButton" />
+				<p:commandButton id="continuarButton" icon="ui-icon-circle-arrow-e"
+					value="Continuar" action="confirmacion"
+					disabled="#{beanPedidos.pedidoCabTmp == null or empty beanPedidos.pedidoCabTmp.pedidoDets}"
+					update="carrito continuarButton" />
 			</h:panelGrid>
 		</h:panelGrid>
+	</h:form>
+	<p:messages id="msg"></p:messages>
+	<br />
+	
+	<p:panel header="Historial de compras:">
+	</p:panel>
+	<h:form id="formHistorial">
+
+		<p:dataTable value="#{beanPedidos.historialPedidos}" var="pedido"
+			rendered="#{not empty beanPedidos.historialPedidos}">
+			<p:column headerText="Número de Compra">
+				<h:outputText value="#{pedido.numeroPedido}" />
+			</p:column>
+			<p:column headerText="Fecha">
+				<h:outputText value="#{pedido.fechaPedido}" />
+			</p:column>
+			<p:column headerText="Detalle">
+				<p:dataTable value="#{pedido.pedidoDets}" var="f" id="tablaFacturas">
+					<p:column id="col1">
+						<f:facet name="header">
+							<h:outputText value="Producto"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{f.producto.nombre}"></h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:column>
+			<p:column headerText="Valor por compra">
+				<h:outputText value="#{pedido.subtotal}" />
+			</p:column>
+		</p:dataTable>
+
+		<h:outputText value="No se encontraron compras."
+			rendered="#{empty beanPedidos.historialPedidos}" />
 	</h:form>
 </body>
 </html>
