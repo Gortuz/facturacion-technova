@@ -7,13 +7,6 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Facturacion</title>
-	<style>
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-        }
-    </style>
 </h:head>
 <body style="font-size: 70%">
 	<h2>Facturacion</h2>
@@ -24,8 +17,6 @@
 	<p:panel id="panel1">
 		<h:form id="form2">
 			<p:panel header="Datos de la factura">
-				<p:commandButton styleClass="no-print" action="#{beanFactura.crearNuevaFactura()}"
-					value="Crear nueva factura" update="form2 :form3" />
 				<p:panelGrid columns="2">
 					<h:outputText value="Nro. de factura:" style="font-weight: bold" />
 					<h:outputText value="#{beanFactura.facturaCabTmp.numeroFactura}" />
@@ -34,7 +25,7 @@
 					<h:outputText value="#{beanFactura.facturaCabTmp.fechaEmision}">
 						 <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Guayaquil" />
 					</h:outputText>
-					<h:outputText styleClass="no-print" value="Seleccione el cliente:"
+					<h:outputText value="Seleccione el cliente:"
 						style="font-weight: bold" />
 					<h:panelGroup>
 						<p:selectOneMenu value="#{beanFactura.cedulaCliente}">
@@ -48,34 +39,28 @@
 					<h:outputText value="Codigo del cliente:" style="font-weight: bold" />
 					<h:outputText id="cedulaCliente"
 						value="#{beanFactura.cedulaCliente}" />
-					<h:commandButton styleClass="no-print" value="Guardar factura"
-						action="#{beanFactura.guardarFactura()}" />
-
+					<h:commandButton value="Guardar factura"
+						action="#{beanFactura.guardarFactura()}" 
+						   styleClass="ui-btn-success"/>
 					<p:messages id="mensajes" />
-
 					<p:commandButton value="Imprimir" icon="pi pi-print" type="button"
 					rendered="#{beanFactura.facturaCabTmpGuardada}" 
                  	onclick="imprimirFactura();"/>
-
-<h:form id="formImprimir">
-  
-  
-        <iframe id="iframeImprimir" src="facturacion_imprimir.xhtml" style="display:none;"></iframe>
-    </h:form>
-
-    <script type="text/javascript">
-        function imprimirFactura() {
-            var iframe = document.getElementById('iframeImprimir');
-            iframe.contentWindow.print(); // Llama a la función de impresión del iframe
-        }
-    </script>
-
+					<h:form id="formImprimir">
+						<iframe id="iframeImprimir" src="facturacion_imprimir.xhtml" style="display:none;"></iframe>
+					</h:form>
+					<script type="text/javascript">
+						function imprimirFactura() {
+							var iframe = document.getElementById('iframeImprimir');
+							iframe.contentWindow.print(); // Llama a la función de impresión del iframe
+						}
+					</script>
 				</p:panelGrid>
 			</p:panel>
 		</h:form>
 		<h:form id="form3">
 			<p:panel header="Detalle de productos">
-				<p:panelGrid styleClass="no-print" columns="6" border="1">
+				<p:panelGrid columns="6" border="1">
 					<h:outputText value="Producto:" />
 					<h:selectOneMenu value="#{beanFactura.codigoProducto}">
 						<f:selectItem itemLabel="Seleccione un producto..." itemValue="-1" />
@@ -90,13 +75,11 @@
 						decimalSeparator="" maxValue="999999999" required="true"
 						requiredMessage="Debe ingresar una cantidad.">					
 					</p:inputNumber>
-					
-
 					<p:commandButton value="adicionar"
 						action="#{beanFactura.insertarDetalle}" update="form3"
 						icon="pi pi-plus-circle" />
 				</p:panelGrid>
-				<p:messages styleClass="no-print" id="mensajes2"></p:messages>
+				<p:messages id="mensajes2"></p:messages>
 				<p:dataTable value="#{beanFactura.facturaCabTmp.facturaDets}"
 					var="d" id="tablaFacturaDets">
 					<f:facet name="header">
@@ -164,7 +147,6 @@
 							</h:panelGrid>
 						</f:facet>
 					</p:column>
-
 				</p:dataTable>
 			</p:panel>
 		</h:form>
