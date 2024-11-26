@@ -28,8 +28,13 @@
 				<p:password value="#{beanLogin.clave}" required="true"
 					size="10" maxlength="10"
 					requiredMessage="Debe ingresar su contraseña." />
-				<p:commandButton value="Ingresar"
-					action="#{beanLogin.accederSistema()}" update="mensajes"/>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Regresar" action="/index.xhtml" 
+						icon="pi pi-arrow-left" immediate="true"
+						style="background-color: red; color: white; border-color:red;"/>
+					<p:commandButton value="Ingresar"
+						action="#{beanLogin.accederSistema()}" update="mensajes"/>
+				</h:panelGrid>
 				<p:messages id="mensajes" />
 			</h:panelGrid>
 		</p:panel>

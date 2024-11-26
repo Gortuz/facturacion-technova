@@ -73,6 +73,7 @@
 		<p:dataExporter type="xls" target=":form2:tabla1" fileName="Productos" /></p:commandButton>
 	</h:form>
 	<h:form id="form2">
+		<p:messages></p:messages>
 		<p:dataTable border="1" value="#{beanProductos.listaProductos}"
 			var="p" paginator="true" rows="6" id="tabla1">
 			<p:column headerText="CÓDIGO">
@@ -106,7 +107,7 @@
 				severity="alert" 
 				widgetVar="menu"
 				id="menuEliminar">
-        			<p:commandButton value="Confirmar" action="#{beanProductos.actionEliminarProducto()}" update="form2" oncomplete="PF('menu').hide()"/>
+        			<p:commandButton value="Confirmar" action="#{beanProductos.actionEliminarProducto()}" update=":form2" oncomplete="PF('menu').hide()"/>
         			<p:commandButton value="Cancelar" onclick="PF('menu').hide();" type="button" />
     		</p:confirmDialog>
 	</h:form>
