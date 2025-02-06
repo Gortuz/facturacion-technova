@@ -1,6 +1,23 @@
 package facturacion.model.manager;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,16 +25,25 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Model;
+import javax.json.JsonObject;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.json.Json;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
+
+import org.wildfly.security.permission.SimpleActionBitsPermissionCollection;
 
 import facturacion.model.dao.entities.Cliente;
 import facturacion.model.dao.entities.EstadoPedido;
 import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.dao.entities.PedidoDet;
 import facturacion.model.dao.entities.Producto;
+import facturacion.model.util.ModelUtil;
 /**
  * Objeto que encapsula la logica basica de acceso a datos mediante JPA. Maneja
  * el patron de diseno singleton para administrar los componentes
@@ -36,8 +62,9 @@ public class ManagerPedidos {
 	@EJB
 	private ManagerAuditoria managerAuditoria;
 	
-
-
+	private final String apiKey = "8ad9ec12d728a10ef6ae-techpay.ec";
+	private final String apiUrl = "https://localhost:3000/api";
+	
 	public ManagerPedidos() {
 		
 	}
@@ -333,4 +360,169 @@ public class ManagerPedidos {
 				this.getClass().toString()+"/despacharPedido()", 
 				"pista de auditoria, pedido despachado nro: "+pedidoCab.getNumeroPedido());
 	}
+	
+	public String pagarConTarjeta(String numeroTarjeta, String titular,
+			String fechaExpiracion, String cvv, String tipoMoneda, String descripcion, PedidoCab pedidoCab) {
+
+		fechaExpiracion = ModelUtil.transformarFecha(fechaExpiracion);
+		numeroTarjeta = numeroTarjeta.replace("-", "");
+		
+		Double monto = Double.valueOf(pedidoCab.getSubtotal().toString());
+		Double montoIVA = monto * managerFacturacion.getPorcentajeIVA() / 100;
+		
+		Double total = monto + montoIVA;
+		
+		
+		JsonObject json = Json.createObjectBuilder()
+				.add("apiKey", this.apiKey)
+                .add("tarjetaNumero", numeroTarjeta)
+                .add("tarjetaCvv", cvv)
+                .add("tarjetaTitular", titular)
+                .add("tarjetaFecha", fechaExpiracion)
+                .add("monto", total.toString())
+                .add("moneda", tipoMoneda)
+                .add("descripcion", descripcion)
+                .build();
+		
+		 try {
+			 	HttpResponse<String> resTotal = consumirAPI(json, "/transacciones/procesar-pago");
+			 	JsonObject res = Json.createReader(new StringReader(resTotal.body())).readObject();
+
+			 	
+			 	if (resTotal.statusCode() == 201) {
+			 		if(res.containsKey("transaccionId")) {
+				 		int id = res.getInt("transaccionId");
+				 		pedidoCab.setTransaccionPedido(id);
+				 	}
+				 	if (res.getString("estado").equals("aprobado"))
+				 		pedidoCab.setTransaccionEstado(4);
+				 	else if (res.getString("estado").equals("rechazado"))
+				 		pedidoCab.setTransaccionEstado(3);
+				 	else if (res.getString("estado").equals("pendiente"))
+				 		pedidoCab.setTransaccionEstado(5);
+				 	
+				 	managerDAO.actualizar(pedidoCab);
+			 	}
+			 	
+			 	
+			 	
+	            return res.getString("estado");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return "Error al procesar el pago: " + e.getMessage();
+	        }
+	}
+	
+//	public String actualizarTransaccionPedido(PedidoCab pedidoCa) {
+//		HttpResponse<String> resTotal = buscarTransaccion(pedidoCa);
+//		JsonObject res = Json.createReader(new StringReader(resTotal.body())).readObject();
+//		
+//		if (resTotal.statusCode() == 200) {
+////			pedidoCa.setEstadoPedido(res.getInt(""));
+//		}
+//		
+//	}
+	
+	public String buscarTransaccion(PedidoCab pedidoCa) throws Exception {
+		TrustManager[] trustAllCertificates = new TrustManager[]{
+		        new X509TrustManager() {
+		            public X509Certificate[] getAcceptedIssuers() {
+		                return null;
+		            }
+
+		            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+		            }
+
+		            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+		            }
+		        }
+		    };
+
+		    // Configurar el SSLContext que usa el TrustManager personalizado
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+		    sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
+
+		    // Crear un HttpClient que use el SSLContext modificado
+		    HttpClient client = HttpClient.newBuilder()
+		            .sslContext(sslContext)
+		            .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl + "/transacciones/" + pedidoCa.getTransaccionPedido()))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	 	JsonObject res = Json.createReader(new StringReader(response.body())).readObject();
+
+        // Procesar la respuesta
+//        int responseCode = response.statusCode();
+        
+//        System.out.println(res.getJsonObject("estadotransaccion").getString("estadotrId"));
+	 	String r = res.getJsonObject("estadotransaccion").getString("estadotrId");
+	 	
+	 	
+	 	if (r.equals("3")) {
+		 	pedidoCa.setTransaccionEstado(null);
+		 	pedidoCa.setTransaccionPedido(null);
+
+	 		managerDAO.actualizar(pedidoCa);
+	 	} else if (r.equals("4")) {
+		 	pedidoCa.setTransaccionEstado(4);
+
+	 		managerDAO.actualizar(pedidoCa);
+	 	}
+
+        return 	r;
+
+	}
+	
+	private HttpResponse<String> consumirAPI(JsonObject json, String url) throws IOException, InterruptedException, NoSuchAlgorithmException, KeyManagementException {
+		
+		TrustManager[] trustAllCertificates = new TrustManager[]{
+		        new X509TrustManager() {
+		            public X509Certificate[] getAcceptedIssuers() {
+		                return null;
+		            }
+
+		            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+		            }
+
+		            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+		            }
+		        }
+		    };
+
+		    // Configurar el SSLContext que usa el TrustManager personalizado
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+		    sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
+
+		    // Crear un HttpClient que use el SSLContext modificado
+		    HttpClient client = HttpClient.newBuilder()
+		            .sslContext(sslContext)
+		            .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl + url))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json.toString(), StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Procesar la respuesta
+//        int responseCode = response.statusCode();
+        
+        return response;
+    }
+	
+	public Double getIVA() {
+		return managerFacturacion.getPorcentajeIVA();
+	}
+	
+	
+	
 }

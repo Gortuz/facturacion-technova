@@ -1,6 +1,8 @@
 package facturacion.model.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 /**
@@ -61,6 +63,16 @@ public class ModelUtil {
 	public static String fecha(Date fecha){
 		SimpleDateFormat formato=new SimpleDateFormat("dd/MM/yyyy hh:mm");
 		return formato.format(fecha);
+	}
+	
+	public static String transformarFecha(String fecha) {
+DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MM/yy");
+        
+        LocalDate fechaParseada = LocalDate.parse("01/" + fecha, DateTimeFormatter.ofPattern("dd/MM/yy"));
+        LocalDate ultimoDiaDelMes = fechaParseada.withDayOfMonth(fechaParseada.lengthOfMonth());
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
+        return formato.format(ultimoDiaDelMes);
 	}
 }
 

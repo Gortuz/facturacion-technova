@@ -2,14 +2,17 @@ package facturacion.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.manager.ManagerPedidos;
+
 import java.io.Serializable;
 
 @Named
@@ -18,6 +21,8 @@ public class BeanSupervisor implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Date fechaInicio;
 	private Date fechaFinal;
+	private Double total;
+	
 	@EJB
 	private ManagerPedidos managerPedidos;
 	private PedidoCab pedidoCabTmp;
@@ -56,6 +61,11 @@ public class BeanSupervisor implements Serializable {
 		try {
 			//capturamos el valor enviado desde el DataTable:
 			pedidoCabTmp=pedidoCab;
+			Double monto = Double.valueOf(pedidoCabTmp.getSubtotal().toString());
+			Double montoIVA = monto * managerPedidos.getIVA() / 100;
+			
+			this.total = monto + montoIVA;
+			System.out.println(monto+"+"+montoIVA+" = "+this.total);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,6 +97,63 @@ public class BeanSupervisor implements Serializable {
 			return null;
 		}
 	}
+	
+	public String actionPagarPedidoConTarjeta(PedidoCab pedidoCab) {
+		try {
+	        // Obtén los datos de la tarjeta desde la solicitud (request)
+	        FacesContext context = FacesContext.getCurrentInstance();
+	        Map<String, String> params = context.getExternalContext().getRequestParameterMap();
+
+	        String nombreForm = "form2:formPago:";
+	        
+	        String numeroTarjeta = params.get(nombreForm+"numeroTarjeta");
+	        String titular = params.get(nombreForm+"titular");
+	        String fechaExpiracion = params.get(nombreForm+"fechaExpiracion");
+	        String cvv = params.get(nombreForm+"cvv");
+	        String tipoMoneda = params.get(nombreForm+"tipoMoneda");
+	        String descripcion = params.get(nombreForm+"descripcion");
+	        
+	        
+	        
+	        String res = managerPedidos.pagarConTarjeta(numeroTarjeta, titular, fechaExpiracion, cvv, tipoMoneda, descripcion, pedidoCab);
+	        
+	        if (res.equals("aprobado")) {
+				JSFUtil.crearMensajeINFO("!Pago exitoso!");
+				this.actionDespacharPedido(pedidoCab);
+	        }
+		 	else if (res.equals("rechazado")) {
+				JSFUtil.crearMensajeERROR("Pago rechazado");
+		 	}
+		 	else if (res.equals("pendiente")) {
+				JSFUtil.crearMensajeWARN("Pago pendiente");
+		 	}
+			
+	        return res;
+  
+	    } catch (Exception e) {
+	        JSFUtil.crearMensajeERROR(e.getMessage());
+	    }
+	    return "";
+	}
+	
+	public String verificarEstadoTransaccion(PedidoCab pedidoCab) throws Exception {
+		String r = managerPedidos.buscarTransaccion(pedidoCab);
+		
+		if (r.equals("4")) {
+			System.out.println("llegué");
+			JSFUtil.crearMensajeINFO("!Pago exitoso!");
+			this.actionDespacharPedido(pedidoCab);
+        }
+	 	else if (r.equals("3")) {
+			JSFUtil.crearMensajeERROR("Pago rechazado");
+	 	}
+	 	else if (r.equals("5")) {
+			JSFUtil.crearMensajeWARN("La transacción está siendo procesada");
+	 	}
+		
+		return "";
+	}
+	
 	public Date getFechaInicio() {
 		return fechaInicio;
 	}
@@ -111,6 +178,14 @@ public class BeanSupervisor implements Serializable {
 	}
 	public BeanLogin getBeanLogin() {
 		return beanLogin;
+	}
+	
+	
+	public Double getTotal() {
+
+		return this.total;
+		
+	
 	}
 	
 	

@@ -44,6 +44,12 @@ public class PedidoCab implements Serializable {
 	@OneToMany(mappedBy="pedidoCab",cascade=CascadeType.ALL)
 	private List<PedidoDet> pedidoDets;
 
+	@Column(name="transaccion_pedido")
+	private Integer transaccionPedido;
+	
+	@Column(name="transaccion_estado")
+	private Integer transaccionEstado;
+	
 	public PedidoCab() {
 	}
 
@@ -107,6 +113,22 @@ public class PedidoCab implements Serializable {
 		pedidoDet.setPedidoCab(null);
 
 		return pedidoDet;
+	}
+	
+	public Integer getTransaccionPedido() {
+		return this.transaccionPedido;
+	}
+
+	public void setTransaccionPedido(Integer transaccionPedido) {
+		this.transaccionPedido = transaccionPedido;
+	}
+	
+	public Integer getTransaccionEstado() {
+		return this.transaccionEstado;
+	}
+
+	public void setTransaccionEstado(Integer estadoPago) {
+		this.transaccionEstado = estadoPago;
 	}
 
 }

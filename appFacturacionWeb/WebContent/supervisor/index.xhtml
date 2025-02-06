@@ -32,9 +32,12 @@
 			<h:outputText value="" />
 			<p:calendar value="#{beanSupervisor.fechaInicio}" />
 			<p:calendar value="#{beanSupervisor.fechaFinal}" />
-			<p:commandButton icon="pi pi-search" value="Buscar" update=":mensajes, :form2:panel1" action="#{beanSupervisor.actionBuscar()}" />
+			<p:commandButton icon="pi pi-search" value="Buscar"
+				update=":mensajes, :form2:panel1"
+				action="#{beanSupervisor.actionBuscar()}" />
 			<p:commandButton icon="pi pi-eraser" value="Borrar Filtros"
-				update=":form2:panel1 :form1" action="#{beanSupervisor.actionBorrarFiltros()}" />	
+				update=":form2:panel1 :form1"
+				action="#{beanSupervisor.actionBorrarFiltros()}" />
 
 		</p:panelGrid>
 	</h:form>
@@ -43,16 +46,20 @@
 	<p:messages id="mensajes" autoUpdate="true" />
 	<h:form id="form2">
 		<p:panel header="Resultado de la búsqueda:" id="panel1">
-				<h:form id="formExport">
-        			<p:commandButton icon="pi pi-file" value="Exportar a CSV" ajax="false">
-        				<p:dataExporter type="csv" target=":form2:dataTable" fileName="Pedidos" />
-    				</p:commandButton>
-    				<p:commandButton icon="pi pi-file-excel" value="Exportar a Excel" ajax="false">
-        				<p:dataExporter type="xls" target=":form2:dataTable" fileName="Pedidos" />
-    				</p:commandButton>
-				</h:form>
-			<p:dataTable id="dataTable" value="#{beanSupervisor.listaPedidoCab}" var="pc"
-				paginator="true" rows="15">
+			<h:form id="formExport">
+				<p:commandButton icon="pi pi-file" value="Exportar a CSV"
+					ajax="false">
+					<p:dataExporter type="csv" target=":form2:dataTable"
+						fileName="Pedidos" />
+				</p:commandButton>
+				<p:commandButton icon="pi pi-file-excel" value="Exportar a Excel"
+					ajax="false">
+					<p:dataExporter type="xls" target=":form2:dataTable"
+						fileName="Pedidos" />
+				</p:commandButton>
+			</h:form>
+			<p:dataTable id="dataTable" value="#{beanSupervisor.listaPedidoCab}"
+				var="pc" paginator="true" rows="15">
 				<p:column headerText="NUM PEDIDO">
 					<h:outputText value="#{pc.numeroPedido}" />
 				</p:column>
@@ -75,23 +82,80 @@
 						icon="pi pi-search" update=":form2:dlg1"
 						oncomplete="PF('dialogo1').show()" />
 				</p:column>
+				<p:column headerText="PAGAR">
+					<p:commandButton action="#{beanSupervisor.actionCargarPedido(pc)}"
+						icon="pi pi-credit-card" update=":form2:dialogoPago"
+						oncomplete="PF('dialogoPago').show()"
+						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado) || pc.transaccionPedido != null}" />
+				</p:column>
+				<p:column headerText="Verificar Estado">
+				    <!-- Botón que solo se muestra cuando el estado de transacción es 5 -->
+				    <p:commandButton 
+				    	update=":form2:panel1, :mensajes"
+				        value="Verificar Estado"
+				        icon="pi pi-info-circle"
+				        action="#{beanSupervisor.verificarEstadoTransaccion(pc)}"
+				        disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado) || pc.transaccionPedido == null}"
+				       />
+				</p:column>
 				<p:column headerText="DESPACHAR">
 					<p:commandButton update=":form2:menuConfirmar"
 						action="#{beanSupervisor.actionCargarPedido(pc)}"
 						icon="pi pi-check" oncomplete="PF('menu').show()"
-						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado)}"  />
+						disabled="#{beanSupervisor.despachado(pc.estadoPedido.descripcionEstado)}" />
 				</p:column>
 			</p:dataTable>
 		</p:panel>
-		<p:confirmDialog 
-				message="¿Seguro deseas despachar el pedido #{beanSupervisor.pedidoCabTmp.numeroPedido}?" 
-				header="Despachar pedido" 
-				severity="alert" 
-				widgetVar="menu"
-				id="menuConfirmar">
-        			<p:commandButton value="Confirmar" action="#{beanSupervisor.actionDespacharPedido(beanSupervisor.pedidoCabTmp)}" update=":form2:panel1,:mensajes" oncomplete="PF('menu').hide()"/>
-        			<p:commandButton value="Cancelar" onclick="PF('menu').hide();" type="button" />
-    	</p:confirmDialog>
+		<p:confirmDialog
+			message="¿Seguro deseas despachar el pedido #{beanSupervisor.pedidoCabTmp.numeroPedido}?"
+			header="Despachar pedido" severity="alert" widgetVar="menu"
+			id="menuConfirmar">
+			<p:commandButton value="Confirmar"
+				action="#{beanSupervisor.actionDespacharPedido(beanSupervisor.pedidoCabTmp)}"
+				update=":form2:panel1,:mensajes" oncomplete="PF('menu').hide()" />
+			<p:commandButton value="Cancelar" onclick="PF('menu').hide();"
+				type="button" />
+		</p:confirmDialog>
+
+		<p:dialog header="Pago con Tarjeta" widgetVar="dialogoPago"
+			modal="true" id="dialogoPago">
+			<h:form id="formPago">
+				<h:panelGrid columns="2">
+					<h:outputText value="Número de Tarjeta:" />
+					<p:inputMask mask="9999-9999-9999-9999" id="numeroTarjeta"
+						required="true" name="numeroTarjeta"/>
+	
+					<h:outputText value="Titular de la Tarjeta:" />
+					<p:inputText id="titular" required="true" name="titular"/>
+	
+					<h:outputText value="Fecha de Expiración (MM/YY):" />
+					<p:inputMask mask="99/99" id="fechaExpiracion" required="true"/>
+	
+					<h:outputText value="Código CVV:" />
+					<p:inputText id="cvv" maxlength="3" required="true" />
+	
+					<h:outputText value="Tipo de Moneda:" />
+					<p:inputText id="tipoMoneda" maxlength="3" required="true" value="USD"/>
+	
+					<h:outputText value="Descripción:" />
+					<p:inputText id="descripcion" required="true" />
+	
+					<h:outputText value="Monto a Pagar:" />
+					<h:outputText value="#{beanSupervisor.total}">
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+					</h:outputText>
+				</h:panelGrid>
+				<br></br>	
+				<p:commandButton value="Realizar Pago"
+					action="#{beanSupervisor.actionPagarPedidoConTarjeta(beanSupervisor.pedidoCabTmp)}"
+					update=":form2:panel1, :mensajes"
+					process="@form"
+					oncomplete="PF('dialogoPago').hide()" />
+				<p:commandButton value="Cancelar" onclick="PF('dialogoPago').hide();"
+					type="button" />
+			</h:form>
+		</p:dialog>
+
 		<p:dialog header="INFORMACIÓN" widgetVar="dialogo1" modal="true"
 			id="dlg1">
 			<p:panel id="detallePedido" header="Información del pedido"

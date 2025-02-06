@@ -9,7 +9,7 @@
 	<title>Ingreso de usuarios</title>
 </h:head>
 <h:body style="font-size:80%">
-	<h:form>
+	<h:form defaultCommand="btnIngresar">
 		<p:panel header="Autenticación de usuarios">
 			<h:panelGrid>
 				Puede utilizar los siguientes usuarios de prueba:
@@ -32,7 +32,7 @@
 					<p:commandButton value="Regresar" action="/index.xhtml" 
 						icon="pi pi-arrow-left" immediate="true"
 						style="background-color: red; color: white; border-color:red;"/>
-					<p:commandButton value="Ingresar"
+					<p:commandButton value="Ingresar" id="btnIngresar"
 						action="#{beanLogin.accederSistema()}" update="mensajes"/>
 				</h:panelGrid>
 				<p:messages id="mensajes" />
