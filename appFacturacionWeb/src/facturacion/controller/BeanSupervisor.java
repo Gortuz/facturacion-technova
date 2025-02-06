@@ -9,11 +9,14 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.json.JsonObject;
+import javax.json.Json;
 
 import facturacion.model.dao.entities.PedidoCab;
 import facturacion.model.manager.ManagerPedidos;
 
 import java.io.Serializable;
+import java.io.StringReader;
 
 @Named
 @SessionScoped
@@ -113,19 +116,30 @@ public class BeanSupervisor implements Serializable {
 	        String tipoMoneda = params.get(nombreForm+"tipoMoneda");
 	        String descripcion = params.get(nombreForm+"descripcion");
 	        
-	        
+	        if (!validarFecha(fechaExpiracion)) {
+	        	System.out.println(validarFecha(fechaExpiracion));
+				JSFUtil.crearMensajeERROR("Error en el formato de fecha");
+	        	return "";
+	        }
 	        
 	        String res = managerPedidos.pagarConTarjeta(numeroTarjeta, titular, fechaExpiracion, cvv, tipoMoneda, descripcion, pedidoCab);
 	        
-	        if (res.equals("aprobado")) {
-				JSFUtil.crearMensajeINFO("!Pago exitoso!");
+	        JsonObject jsonResponse = Json.createReader(new StringReader(res)).readObject();
+
+	        String mensaje = jsonResponse.getString("mensaje");
+	        String estado = jsonResponse.getString("estado");
+
+	        int transaccionID = jsonResponse.getInt("transaccionId");
+	        
+	        if (estado.equals("aprobado")) {
+				JSFUtil.crearMensajeINFO(mensaje+"\nTransacción ID: "+transaccionID);
 				this.actionDespacharPedido(pedidoCab);
 	        }
-		 	else if (res.equals("rechazado")) {
-				JSFUtil.crearMensajeERROR("Pago rechazado");
+		 	else if (estado.equals("rechazado")) {
+				JSFUtil.crearMensajeERROR(mensaje+"\nTransacción ID: "+transaccionID);
 		 	}
-		 	else if (res.equals("pendiente")) {
-				JSFUtil.crearMensajeWARN("Pago pendiente");
+		 	else if (estado.equals("pendiente")) {
+				JSFUtil.crearMensajeWARN(mensaje+"\nTransacción ID: "+transaccionID);
 		 	}
 			
 	        return res;
@@ -137,21 +151,38 @@ public class BeanSupervisor implements Serializable {
 	}
 	
 	public String verificarEstadoTransaccion(PedidoCab pedidoCab) throws Exception {
-		String r = managerPedidos.buscarTransaccion(pedidoCab);
+		JsonObject res = managerPedidos.buscarTransaccion(pedidoCab);
+	 	String r = res.getJsonObject("estadotransaccion").getString("estadotrId");
+	 	String id = res.getString("transaccionId");
 		
 		if (r.equals("4")) {
-			System.out.println("llegué");
-			JSFUtil.crearMensajeINFO("!Pago exitoso!");
+			JSFUtil.crearMensajeINFO("!Pago exitoso!\nTransacción ID: "+id);
 			this.actionDespacharPedido(pedidoCab);
         }
 	 	else if (r.equals("3")) {
-			JSFUtil.crearMensajeERROR("Pago rechazado");
+			JSFUtil.crearMensajeERROR("Pago rechazado\nTransacción ID: ");
 	 	}
 	 	else if (r.equals("5")) {
-			JSFUtil.crearMensajeWARN("La transacción está siendo procesada");
+			JSFUtil.crearMensajeWARN("La transacción está siendo procesada\nTransacción ID: "+id);
+	 	}
+	 	else if (r.equals("2")) {
+			JSFUtil.crearMensajeERROR("Rechazado por tarjeta inválida\nTransacción ID: "+id);
 	 	}
 		
 		return "";
+	}
+	
+	private boolean validarFecha(String fecha) {
+		String[] aux;
+		aux = fecha.split("/");
+
+		if (Integer.parseInt(aux[0]) > 12) {
+			return false;
+		} else if(Integer.parseInt(aux[1]) <= 22) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public Date getFechaInicio() {
@@ -182,10 +213,7 @@ public class BeanSupervisor implements Serializable {
 	
 	
 	public Double getTotal() {
-
 		return this.total;
-		
-	
 	}
 	
 	

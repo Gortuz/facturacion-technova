@@ -396,8 +396,10 @@ public class ManagerPedidos {
 				 	}
 				 	if (res.getString("estado").equals("aprobado"))
 				 		pedidoCab.setTransaccionEstado(4);
-				 	else if (res.getString("estado").equals("rechazado"))
+				 	else if (res.getString("estado").equals("rechazado")) {
 				 		pedidoCab.setTransaccionEstado(3);
+					 	pedidoCab.setTransaccionPedido(null);
+				 	}
 				 	else if (res.getString("estado").equals("pendiente"))
 				 		pedidoCab.setTransaccionEstado(5);
 				 	
@@ -406,7 +408,7 @@ public class ManagerPedidos {
 			 	
 			 	
 			 	
-	            return res.getString("estado");
+	            return res.toString();
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            return "Error al procesar el pago: " + e.getMessage();
@@ -423,7 +425,7 @@ public class ManagerPedidos {
 //		
 //	}
 	
-	public String buscarTransaccion(PedidoCab pedidoCa) throws Exception {
+	public JsonObject buscarTransaccion(PedidoCab pedidoCa) throws Exception {
 		TrustManager[] trustAllCertificates = new TrustManager[]{
 		        new X509TrustManager() {
 		            public X509Certificate[] getAcceptedIssuers() {
@@ -461,10 +463,11 @@ public class ManagerPedidos {
 //        int responseCode = response.statusCode();
         
 //        System.out.println(res.getJsonObject("estadotransaccion").getString("estadotrId"));
+	 	System.out.println(res);
 	 	String r = res.getJsonObject("estadotransaccion").getString("estadotrId");
 	 	
 	 	
-	 	if (r.equals("3")) {
+	 	if (r.equals("3") || r.equals("2")) {
 		 	pedidoCa.setTransaccionEstado(null);
 		 	pedidoCa.setTransaccionPedido(null);
 
@@ -473,9 +476,8 @@ public class ManagerPedidos {
 		 	pedidoCa.setTransaccionEstado(4);
 
 	 		managerDAO.actualizar(pedidoCa);
-	 	}
-
-        return 	r;
+	 	} 
+        return 	res;
 
 	}
 	
